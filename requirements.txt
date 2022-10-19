@@ -175,6 +175,10 @@ smmap==5.0.0
 stack-data==0.4.0
     # via ipython
 streamlit==1.12.0
+    # via
+    #   -r requirements.in
+    #   streamlit-chat
+streamlit-chat==0.0.2.1
     # via -r requirements.in
 toml==0.10.2
     # via streamlit
