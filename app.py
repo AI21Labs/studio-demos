@@ -7,6 +7,10 @@ from utils.studio_style import apply_studio_style
 import argparse
 from utils.completion import complete
 
+from utils.install_ai21_package import install_ai21_package_if_needed
+install_ai21_package_if_needed(package_name="studio_chatbot", repo_ssh_url="git+ssh://git@bitbucket.org/ai21labs/studio-chatbot.git")
+
+from studio_chatbot.constants import VOCAB_PATH
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -158,6 +162,7 @@ if __name__ == '__main__':
         st.session_state['generated_sections_data'] = {}
 
     st.title("Generate a Blog Post")
+    st.text(f"VOCAB_PATH={VOCAB_PATH}")
     st.markdown("#### Blog Title")
     title = st.text_input(label="Write your blog post title", placeholder="",
                           value="5 Strategies to overcome writer's block").strip()
