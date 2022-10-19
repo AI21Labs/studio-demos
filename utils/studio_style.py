@@ -5,7 +5,7 @@ def apply_studio_style():
         """
        
         <style>
-        @import url(//db.onlinewebfonts.com/c/9e00143409affcb46a1ae58634aa64be?family=Sofia+Pro);
+        @import url(https://db.onlinewebfonts.com/c/9e00143409affcb46a1ae58634aa64be?family=Sofia+Pro);
 
 			html, body, [class*="css"]  {
 			font-family: 'Sofia Pro';
