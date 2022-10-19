@@ -10,7 +10,7 @@ def apply_studio_style():
               font-family: 'SofiaPro';
               font-style: normal;
               font-weight: 700;
-              src: url('file:///assets/font.woff2') format('woff2'), url('file:///assets/font.woff') format('woff');
+              src: url('assets/font.woff2') format('woff2'), url('assets/font.woff') format('woff');
             }
 
             html, body, [class*="css"]  {
