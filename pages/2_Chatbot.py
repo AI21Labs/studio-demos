@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_chat import message
-
+from typing import Dict
 from constants import CUSTOM_CHAT_DEMOS
 
 from utils.completion import complete
