@@ -4,15 +4,12 @@ from typing import List, Dict
 from constants import CUSTOM_CHAT_DEMOS
 
 from utils.completion import complete
-from utils.components.completion_log import init_log
 from utils.studio_style import apply_studio_style
 
 st.set_page_config(
     page_title="Streamlit Chat - Demo",
     page_icon=":robot:"
 )
-
-HISTORY_COLS = ["examples", "background", "chat", "class"]
 
 
 def message_to_string(message: Dict[str, str]) -> str:
@@ -23,6 +20,7 @@ def messages_to_string(messages: List[Dict[str, str]]) -> str:
     messages_parsed_dicts = [message_to_string(message) for message in messages]
     messages_parsed = '\n'.join(messages_parsed_dicts)
     return messages_parsed
+
 
 def query(prompt):
     config = {
@@ -40,7 +38,8 @@ def query(prompt):
     return res
 
 
-def five_lines():
+def six_lines():
+    st.write("")
     st.write("")
     st.write("")
     st.write("")
@@ -76,15 +75,6 @@ def reset_chat():
     st.session_state.messages.append({st.session_state['bot_name']: st.session_state['greeting']})
 
 
-def log_chat(feedback_class):
-    return [{
-             'examples': st.session_state['fewshot'],
-             'background': st.session_state['background'],
-             'chat': messages_to_string(st.session_state.messages),
-             'class': feedback_class
-             }]
-
-
 def get_message_text(i):
     return list(st.session_state['messages'][i].values())[0]
 
@@ -106,7 +96,6 @@ if __name__ == '__main__':
 
     apply_studio_style()
     custom_demo = "shoe_la_la"
-    init_log(HISTORY_COLS)
     init_demo(custom_demo)
 
     st.session_state['bot_name'] = st.session_state['custom_participants'][0]
@@ -141,31 +130,14 @@ if __name__ == '__main__':
             message(get_message_text(i), key=str(i) + '_user', avatar_style='avataaars', seed=23)
             message(get_message_text(i+1), is_user=True, key=str(i+1), avatar_style='bottts', seed=12)
         if i == total_messages-2:
-            with col2:
-                five_lines()
-                if st.button(label="😢", key=str(i) + "sad"):
-                    st.session_state["completion_log"].add_completion(log_chat('sad'))
             with col3:
-                five_lines()
-                if st.button(label="😐", key=str(i) + "okay"):
-                    st.session_state["completion_log"].add_completion(log_chat('okay'))
+                six_lines()
                 if st.button(label="Regenerate", key=str(i) + "regen"):
                     regenerate_completion()
                     st.experimental_rerun()
-            with col4:
-                five_lines()
-                if st.button(label="😃", key=str(i) + "happy"):
-                    st.session_state["completion_log"].add_completion(log_chat('happy'))
     st.text_input(label="Enter text:", on_change=add_input, key='text_input')
 
     st.write("--------------------------------")
-
-    col1, col2 = st.columns([10, 3])
-    with col1:
-        if st.button(label="Reset conversation", on_click=reset_chat):
-            st.experimental_rerun()
-    with col2:
-        if st.button(label="Save Conversation"):
-            st.session_state["completion_log"].add_completion(log_chat('conversation'))
-    st.session_state["completion_log"].display()
+    if st.button(label="Reset conversation", on_click=reset_chat):
+        st.experimental_rerun()
 
