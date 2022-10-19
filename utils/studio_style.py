@@ -5,10 +5,10 @@ def apply_studio_style():
         """
        
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+        @import url(//db.onlinewebfonts.com/c/9e00143409affcb46a1ae58634aa64be?family=Sofia+Pro);
 
 			html, body, [class*="css"]  {
-			font-family: 'Roboto', sans-serif;
+			font-family: 'Sofia Pro';
 			}
         </style>
     """,
