@@ -111,10 +111,8 @@ CLASSIFICATION_PROMPT="""Classify the following news article into one of the fol
 1. World
 2. Sports
 3. Business
-4. Science and Technology
-Title:
-D.C. Unveils Stadium Plan
-Summary:
-Rumors spread that Major League Baseball is edging closer to moving the Expos to Washington as D.C. officials announce plans for a stadium on the Anacostia waterfront.
-The topic of this article is:
-"""
+4. Science and Technology"""
+
+CLASSIFICATION_TITLE = "D.C. Unveils Stadium Plan"
+
+CLASSIFICATION_SUMMARY = "Rumors spread that Major League Baseball is edging closer to moving the Expos to Washington as D.C. officials announce plans for a stadium on the Anacostia waterfront."
