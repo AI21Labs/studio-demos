@@ -23,7 +23,7 @@ def get_args():
 
 def build_prompt(title, sections, section_heading):
     sections_text = '\n'.join(sections)
-    prompt = f"Write a descriptive section in a blog post according to the following details.\n\nBlog Title:\n{title}\n\nBlog Sections:\n{sections_text}\n\nCurrent Section Heading:\n{section_heading}"
+    prompt = f"Write a descriptive section in a blog post according to the following details.\n\nBlog Title:\n{title}\n\nBlog Sections:\n{sections_text}\n\nCurrent Section Heading:\n{section_heading}\n\nCurrent Section Text:\n"
     return prompt
 
 def generate_sections_content(num_results, sections, title):
@@ -255,11 +255,13 @@ if __name__ == '__main__':
     if 'generated_sections_data' not in st.session_state:
         st.session_state['generated_sections_data'] = {}
 
-    st.title("Generate a Blog Post")
+    st.title("Blog Post Generation")
+    st.text("Generating a blog post based on a title")
     st.markdown("#### Blog Title")
     title = st.text_input(label="Write your blog post title", placeholder="",
                           value="5 Strategies to overcome writer's block").strip()
     st.markdown("#### Blog Outline")
+    st.text("Click the button to generate the blog outline")
     st.button(label="Generate Outline", on_click=build_generate_outline(title))
 
     sections = []
@@ -267,8 +269,10 @@ if __name__ == '__main__':
         text_area_outline = st.text_area(label="", height=250, value=st.session_state["outline"],
                                          on_change=on_outline_change)
         sections = text_area_outline.split("\n")
+        st.text("Unsatisfied with the generated outline? Click the 'Generate Outline' button again to re-generate it, or edit it inline.")
 
         st.markdown("#### Blog Sections")
+        st.text("Click the button to generate the blog sections from the outline")
         st.button(label="Generate Sections", on_click=build_event_loop(title, sections, num_results))
 
     if st.session_state['show_sections']:
