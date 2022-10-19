@@ -96,8 +96,9 @@ def init_demo(custom_demo):
         st.session_state['custom_examples'] = ""
 
 
-def main(custom_demo):
+if __name__ == '__main__':
 
+    custom_demo = "shoe_la_la"
     init_log(HISTORY_COLS)
     init_demo(custom_demo)
     st.title("AI21 Studio Chatbot")
@@ -163,6 +164,6 @@ def main(custom_demo):
             st.session_state["completion_log"].add_completion(log_chat('conversation'))
     st.session_state["completion_log"].display()
 
-
-def get_app(custom_demo=None):
-    return main(custom_demo)
+#
+# def get_app(custom_demo=None):
+#     return main(custom_demo)
