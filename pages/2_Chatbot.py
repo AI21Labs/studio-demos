@@ -111,18 +111,24 @@ if __name__ == '__main__':
     st.title("AI21 Studio Chatbot")
     st.session_state['model'] = st.selectbox(label="Model", options=['j1-jumbo', 'experimental/j1-grande-instruct', 'j1-grande', 'j1-large'])
 
-    with st.expander("Participant names"):
-        col1, empty, col2 = st.columns([3, 3, 3])
-        with col1:
-            st.session_state['bot_name'] = st.text_input(label="Chatbot name", value=st.session_state['custom_participants'][0])
-        with col2:
-            st.session_state['user_name'] = st.text_input(label="User name", value=st.session_state['custom_participants'][1])
-    with st.expander("Few-shot examples"):
-        st.session_state['fewshot'] = st.text_area(label="", value=st.session_state['custom_examples'])
-    with st.expander("Background"):
-        st.session_state['background'] = st.text_area(label="", value=st.session_state['custom_background'])
-    with st.expander("Greeting"):
-        st.session_state['greeting'] = st.text_area(label="", value=st.session_state['custom_greeting'])
+    # with st.expander("Participant names"):
+    #     col1, empty, col2 = st.columns([3, 3, 3])
+    #     with col1:
+    #         st.session_state['bot_name'] = st.text_input(label="Chatbot name", value=st.session_state['custom_participants'][0])
+    #     with col2:
+    #         st.session_state['user_name'] = st.text_input(label="User name", value=st.session_state['custom_participants'][1])
+    # with st.expander("Few-shot examples"):
+    #     st.session_state['fewshot'] = st.text_area(label="", value=st.session_state['custom_examples'])
+    # with st.expander("Background"):
+    #     st.session_state['background'] = st.text_area(label="", value=st.session_state['custom_background'])
+    # with st.expander("Greeting"):
+    #     st.session_state['greeting'] = st.text_area(label="", value=st.session_state['custom_greeting'])
+
+    st.session_state['bot_name'] = st.session_state['custom_participants'][0]
+    st.session_state['user_name'] = st.session_state['custom_participants'][1]
+    st.session_state['fewshot'] = st.session_state['custom_examples']
+    st.session_state['background'] = st.session_state['custom_background']
+    st.session_state['greeting'] = st.session_state['custom_greeting']
 
     if 'messages' not in st.session_state:
         reset_chat()
