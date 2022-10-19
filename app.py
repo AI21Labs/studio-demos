@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import asyncio
 from aiohttp import ClientSession
+from utils.studio_style import apply_studio_style
 
 import argparse
 from utils.completion import complete
@@ -141,8 +142,9 @@ def on_outline_change():
 
 if __name__ == '__main__':
 
-    args = get_args()
+    apply_studio_style()
 
+    args = get_args()
     num_results = args.num_results
 
     # Initialization
