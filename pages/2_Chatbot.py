@@ -5,6 +5,7 @@ from constants import CUSTOM_CHAT_DEMOS
 
 from utils.completion import complete
 from utils.components.completion_log import init_log
+from utils.studio_style import apply_studio_style
 
 st.set_page_config(
     page_title="Streamlit Chat - Demo",
@@ -98,6 +99,7 @@ def init_demo(custom_demo):
 
 if __name__ == '__main__':
 
+    apply_studio_style()
     custom_demo = "shoe_la_la"
     init_log(HISTORY_COLS)
     init_demo(custom_demo)
