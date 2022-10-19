@@ -108,21 +108,6 @@ if __name__ == '__main__':
     custom_demo = "shoe_la_la"
     init_log(HISTORY_COLS)
     init_demo(custom_demo)
-    st.title("AI21 Studio Chatbot")
-    st.session_state['model'] = st.selectbox(label="Model", options=['j1-jumbo', 'experimental/j1-grande-instruct', 'j1-grande', 'j1-large'])
-
-    # with st.expander("Participant names"):
-    #     col1, empty, col2 = st.columns([3, 3, 3])
-    #     with col1:
-    #         st.session_state['bot_name'] = st.text_input(label="Chatbot name", value=st.session_state['custom_participants'][0])
-    #     with col2:
-    #         st.session_state['user_name'] = st.text_input(label="User name", value=st.session_state['custom_participants'][1])
-    # with st.expander("Few-shot examples"):
-    #     st.session_state['fewshot'] = st.text_area(label="", value=st.session_state['custom_examples'])
-    # with st.expander("Background"):
-    #     st.session_state['background'] = st.text_area(label="", value=st.session_state['custom_background'])
-    # with st.expander("Greeting"):
-    #     st.session_state['greeting'] = st.text_area(label="", value=st.session_state['custom_greeting'])
 
     st.session_state['bot_name'] = st.session_state['custom_participants'][0]
     st.session_state['user_name'] = st.session_state['custom_participants'][1]
@@ -130,11 +115,18 @@ if __name__ == '__main__':
     st.session_state['background'] = st.session_state['custom_background']
     st.session_state['greeting'] = st.session_state['custom_greeting']
 
+    st.title("Shoe store support chatbot")
+
+    st.subheader("Model")
+    st.session_state['model'] = st.selectbox(label='Select your preferred AI21 model', options=['j1-jumbo', 'experimental/j1-grande-instruct', 'j1-grande', 'j1-large'])
+
     if 'messages' not in st.session_state:
         reset_chat()
     if 'display' not in st.session_state:
         st.session_state['display'] = {}
 
+    st.write("--------------------------------")
+    st.subheader("Chat")
     st.session_state['display'][0] = {}
     st.session_state['display'][0]["cols"] = st.empty()
     col1, col2 = st.session_state['display'][0]["cols"].columns([9, 1.5])
@@ -177,6 +169,3 @@ if __name__ == '__main__':
             st.session_state["completion_log"].add_completion(log_chat('conversation'))
     st.session_state["completion_log"].display()
 
-#
-# def get_app(custom_demo=None):
-#     return main(custom_demo)
