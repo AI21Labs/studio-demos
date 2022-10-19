@@ -16,7 +16,7 @@ def query(prompt):
                    prompt=prompt,
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
-    return res
+    return res["completions"][0]["data"]["text"]
 
 
 if __name__ == '__main__':
@@ -28,13 +28,12 @@ if __name__ == '__main__':
     st.session_state['model'] = st.selectbox(label="Select your preferred AI21 model",
                                              options=['j1-jumbo', 'experimental/j1-grande-instruct', 'j1-grande', 'j1-large'])
 
+    st.write("--------------------------------")
     classification_prompt = st.text_area(label="Classification instruction:", value=CLASSIFICATION_PROMPT, height=300)
 
     if st.button(label="Classify"):
         with st.spinner("Loading..."):
-            st.session_state["result"] = query(CLASSIFICATION_FEWSHOT + classification_prompt)
+            st.session_state["classification_result"] = query(CLASSIFICATION_FEWSHOT + classification_prompt)
 
-    st.write(classification_prompt)
-    if "result" in st.session_state:
-        st.subheader("Completion:")
-        st.write(st.session_state["result"])
+    if "classification_result" in st.session_state:
+        st.subheader(f"Topic: {st.session_state['classification_result']}")
