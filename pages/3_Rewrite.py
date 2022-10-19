@@ -5,7 +5,7 @@ from utils.completion import _full_url
 from utils.studio_style import apply_studio_style
 
 
-@st.cache
+@st.cache(show_spinner=False)
 def rewrite(text, api_key, intent="general", span_start=0, span_end=None, env="production"):
     url = _full_url(env, model_type='experimental', custom_model='', endpoint='rewrite')
     auth_header = f"Bearer {api_key}"
@@ -34,6 +34,19 @@ if __name__ == '__main__':
                          placeholder="Let's set up a meeting to discuss opportunities using AI21 Studio",
                          value="Let's set up a meeting to discuss opportunities using AI21 Studio").strip()
 
-    st.button(label="Rewrite", on_click=lambda: get_suggestions(text))
+    intent = st.radio(
+        "Set rewrite intent 👉",
+        key="intent",
+        options=["general", "formal", "casual", "long", "short"],
+        horizontal=True
+    )
+
+    # col1, *_ = st.columns(4)
+    # with col1:
+        # intent = st.selectbox(
+        #     "Rewrite intent",
+        #     ("general", "formal", "casual", "long", "short"),
+        # )
+    st.button(label="Rewrite", on_click=lambda: get_suggestions(text, intent=intent))
     if "rewrite_rewritten_texts" in st.session_state:
         st.markdown(body='* ' + '\n* '.join(st.session_state["rewrite_rewritten_texts"]))
