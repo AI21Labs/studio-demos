@@ -47,3 +47,72 @@ CHATBOT_SHOE_LA_LA = {'participants': SHOE_LA_LA_PARTICIPANTS,
                       'examples': SHOE_LA_LA_FEW_SHOT}
 
 CUSTOM_CHAT_DEMOS = {'shoe_la_la': CHATBOT_SHOE_LA_LA}
+
+
+CLASSIFICATION_FEWSHOT="""Classify the following news article into one of the following topics:
+1. World
+2. Sports
+3. Business
+4. Science and Technology
+Title:
+Astronomers Observe Collision of Galaxies, Formation of Larger
+Summary:
+An international team of astronomers has obtained the clearest images yet of the merger of two distant clusters of galaxies, calling it one of the most powerful cosmic events ever witnessed.
+The topic of this article is:
+Science and Technology
+
+===
+
+Classify the following news article into one of the following topics:
+1. World
+2. Sports
+3. Business
+4. Science and Technology
+Title:
+Bomb Explodes Near U.S. Military Convoy (AP)
+Summary:
+AP - A car bomb exploded early Sunday near a U.S. military convoy on the road leading to Baghdad's airport, Iraqi police said, and a witness said two Humvees were destroyed.
+The topic of this article is:
+World
+
+===
+
+Classify the following news article into one of the following topics:
+1. World
+2. Sports
+3. Business
+4. Science and Technology
+Title:
+Maradona goes to Cuba
+Summary:
+The former Argentine football star, Diego Armando Maradona, traveled on Monday to Cuba to continue his treatment against his addiction to drugs.
+The topic of this article is:
+Sports
+
+===
+
+Classify the following news article into one of the following topics:
+1. World
+2. Sports
+3. Business
+4. Science and Technology
+Title:
+Duke earnings jump in third quarter
+Summary:
+Duke Energy Corp. reports third-quarter net income of  $389 million, or 41 cents per diluted share, sharply above earnings of  $49 million, or 5 cents per diluted share, in the same period last year.
+The topic of this article is:
+Business
+
+===
+
+"""
+
+CLASSIFICATION_PROMPT="""Classify the following news article into one of the following topics:
+1. World
+2. Sports
+3. Business
+4. Science and Technology"""
+
+CLASSIFICATION_TITLE = "D.C. Unveils Stadium Plan"
+
+CLASSIFICATION_SUMMARY = "Rumors spread that Major League Baseball is edging closer to moving the Expos to Washington as D.C. officials announce plans for a stadium on the Anacostia waterfront."

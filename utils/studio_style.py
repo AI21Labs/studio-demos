@@ -3,18 +3,12 @@ import streamlit as st
 def apply_studio_style():
     st.markdown(
         """
-       
         <style>
-            @font-face {
-              font-family: 'SofiaPro';
-              font-style: normal;
-              font-weight: 700;
-              src: url('./assets/font.woff2') format('woff2'), url('./assets/font.woff') format('woff');
-            }
+           @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
             html, body, [class*="css"]  {
-            font-family: 'SofiaPro';
-            }
+            font-family: 'Roboto', sans-serif;
+			}
         </style>
     """,
         unsafe_allow_html=True,
