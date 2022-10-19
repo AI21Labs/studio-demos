@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_chat import message
-from typing import Dict
+from typing import List, Dict
 from constants import CUSTOM_CHAT_DEMOS
 
 from utils.completion import complete
@@ -18,6 +18,11 @@ HISTORY_COLS = ["examples", "background", "chat", "class"]
 def message_to_string(message: Dict[str, str]) -> str:
     return [f"{k}: {v}" for k, v in message.items()][0]
 
+
+def messages_to_string(messages: List[Dict[str, str]]) -> str:
+    messages_parsed_dicts = [message_to_string(message) for message in messages]
+    messages_parsed = '\n'.join(messages_parsed_dicts)
+    return messages_parsed
 
 def query(prompt):
     config = {
