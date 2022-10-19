@@ -291,7 +291,7 @@ if __name__ == '__main__':
                                                                                                         key="generated-section"+s)
             st.session_state['generated_sections_data'][s]["completions"][index]["data"]["text"] = section_i_text
             col1, col2, col3, col4, col5, col6 = st.session_state['generated_sections_data'][s]["cols"].columns(
-                [0.2, 0.2, 0.06, 0.045, 0.05, 0.4])
+                [0.2, 0.2, 0.06, 0.047, 0.05, 0.4])
 
             with col1:
                 st.button("Generate Again", on_click=build_event_loop_one_section(title, s, num_results),
