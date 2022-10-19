@@ -5,6 +5,9 @@ from utils.completion import _full_url
 from utils.studio_style import apply_studio_style
 
 
+API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
+
+
 @st.cache(show_spinner=False)
 def rewrite(text, api_key, intent="general", span_start=0, span_end=None, env="production"):
     url = _full_url(env, model_type='experimental', custom_model='', endpoint='rewrite')
@@ -21,7 +24,7 @@ def rewrite(text, api_key, intent="general", span_start=0, span_end=None, env="p
 
 
 def get_suggestions(text, intent='general', span_start=0, span_end=None):
-    rewrite_resp = rewrite(text, intent=intent, span_start=span_start, span_end=span_end, api_key="pF579gSqyUwcGSjSMTusR4GvAL9reduU")
+    rewrite_resp = rewrite(text, intent=intent, span_start=span_start, span_end=span_end, api_key=API_KEY)
     rewritten_texts = [sug['text'] for sug in rewrite_resp['suggestions']]
     st.session_state["rewrite_rewritten_texts"] = rewritten_texts
 
