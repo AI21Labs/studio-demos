@@ -291,16 +291,14 @@ if __name__ == '__main__':
                                                                                                         key="generated-section"+s)
             st.session_state['generated_sections_data'][s]["completions"][index]["data"]["text"] = section_i_text
             col1, col2, col3, col4, col5, col6 = st.session_state['generated_sections_data'][s]["cols"].columns(
-                [0.3, 0.3, 2, 1, 1, 1])
+                [0.25, 0.25, 1, 1, 1, 1])
 
             with col1:
                 st.button("<", on_click=build_on_prev_click(s, i, section_completions, arg_sort), key="<"+s)
             with col2:
                 st.button(">", on_click=build_on_next_click(s, i, section_completions, arg_sort), key=">"+s)
             with col3:
-                st.button("Generate Again", on_click=build_event_loop_one_section(title, s, num_results), key="generate-again-"+s)
+                st.button("Paraphrase", on_click=build_paraphrase(s, tone="general", times=1),key="paraphrase-button-" + s)
 
-                st.markdown("**Paraphrase the generated text**")
-                tone = st.radio("Tone", ["General", "Formal", "Casual", "Short", "Long"], key="tone-radio-"+s)
-
-                st.button("Paraphrase", on_click=build_paraphrase(s, tone, times=1), key="paraphrase-button-"+s)
+            with col4:
+                st.button("Generate Again", on_click=build_event_loop_one_section(title, s, num_results),key="generate-again-" + s)
