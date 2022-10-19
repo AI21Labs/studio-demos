@@ -4,12 +4,10 @@ def apply_studio_style():
     st.markdown(
         """
         <style>
-         @import url(http://db.onlinewebfonts.com/c/9e00143409affcb46a1ae58634aa64be?family=Sofia+Pro);
-         @font-face {font-family: "Sofia Pro";
-}
+           @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
-			html, body, [class*="css"]  {
-			font-family: 'Sofia Pro';
+            html, body, [class*="css"]  {
+            font-family: 'Roboto', sans-serif;
 			}
         </style>
     """,
