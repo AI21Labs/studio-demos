@@ -16,7 +16,6 @@ def _full_url(env, model_type, custom_model, endpoint):
 
 async def async_complete(model_type, prompt, config, api_key, custom_model=None, env='production', delay=0):
     async with ClientSession() as session:
-        await asyncio.sleep(delay)
         url = _full_url(env, model_type, custom_model, endpoint='complete')
         auth_header = f"Bearer {api_key}"
         res = await session.post(
