@@ -15,7 +15,7 @@ def apply_studio_style():
             }
 
             html, body, [class*="css"]  {
-            font-family: 'Sofia Pro'; 
+            font-family: 'Sofia Pro';
             }
         </style>
     """,
