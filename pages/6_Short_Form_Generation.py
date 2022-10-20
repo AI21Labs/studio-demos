@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     apply_studio_style()
     st.title("Product Description Generation")
-    st.markdown("###### Generate a product description for fashion eCommerce site based on a list of features")
+    st.markdown("###### Generating a product description for fashion eCommerce site based on a list of features")
 
 
     product_input = st.text_input("Product", value="Talking Picture Oxford Flat")

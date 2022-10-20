@@ -256,7 +256,7 @@ if __name__ == '__main__':
         st.session_state['generated_sections_data'] = {}
 
     st.title("Blog Post Generation")
-    st.text("Generating a blog post based on a title")
+    st.markdown("###### Generating a blog post based on a title")
     st.markdown("#### Blog Title")
     title = st.text_input(label="Write your blog post title", placeholder="",
                           value="5 Strategies to overcome writer's block").strip()
