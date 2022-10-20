@@ -12,6 +12,7 @@ import os
 API_KEY = os.getenv("API_KEY")
 DUMMIES_LIST = ["Dummy1", "Dummy2", "Dummy3", "Dummy4"]
 
+
 @st.cache(show_spinner=False)
 def rewrite(text, api_key, intent="general", span_start=0, span_end=None, env="production"):
     url = _full_url(env, model_type='experimental', custom_model='', endpoint='rewrite')
@@ -33,17 +34,17 @@ def get_suggestions(text, intent='general', span_start=0, span_end=None):
     st.session_state["rewrite_rewritten_texts"] = rewritten_texts
 
 
-def show_next():
+def show_next(cycle_length):
     # From streamlit docs: "When updating Session state in response to events, a callback function gets executed first, and then the app is executed from top to bottom."
     # This means this function just needs to update the current index. The text itself would be shown since the entire app is executed again
     curr_index = st.session_state["rewrite_curr_index"]
-    next_index = (curr_index + 1) % len(DUMMIES_LIST)
+    next_index = (curr_index + 1) % cycle_length
     st.session_state["rewrite_curr_index"] = next_index
 
 
-def show_prev():
+def show_prev(cycle_length):
     curr_index = st.session_state["rewrite_curr_index"]
-    prev_index = (curr_index - 1) % len(DUMMIES_LIST)
+    prev_index = (curr_index - 1) % cycle_length
     st.session_state["rewrite_curr_index"] = prev_index
 
 
@@ -70,18 +71,18 @@ if __name__ == '__main__':
         # )
     st.button(label="Rewrite", on_click=lambda: get_suggestions(text, intent=intent))
     if "rewrite_rewritten_texts" in st.session_state:
-        st.markdown(body='* ' + '\n* '.join(st.session_state["rewrite_rewritten_texts"]))
+        suggestions = st.session_state["rewrite_rewritten_texts"]
+        st.markdown(body='* ' + '\n* '.join(suggestions))
 
         ph = st.empty()
         if "rewrite_curr_index" not in st.session_state:
             st.session_state["rewrite_curr_index"] = 0
         curr_index = st.session_state["rewrite_curr_index"]
-        ph.text_area(label="", value=DUMMIES_LIST[curr_index])
+        ph.text_area(label="", value=suggestions[curr_index])
 
         col1, col2, col3, col4 = st.columns([0.5, 0.5, 4, 4])
         with col1:
-            st.button("<", on_click=lambda: show_prev())
+            st.button("<", on_click=show_prev, args=(len(suggestions),))
         with col2:
-            st.button(">", on_click=lambda: show_next())
-        print(st.session_state["rewrite_curr_index"])
+            st.button(">", on_click=show_next, args=(len(suggestions),))
 
