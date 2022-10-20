@@ -49,7 +49,6 @@ if __name__ == '__main__':
     st.title("Rewrite text")
     text = st.text_area(label="Insert your text here",
                          max_chars=500,
-                         height=150,
                          placeholder="Let's set up a meeting to discuss opportunities using AI21 Studio",
                          value="Let's set up a meeting to discuss opportunities using AI21 Studio").strip()
 
@@ -68,7 +67,7 @@ if __name__ == '__main__':
         if "rewrite_curr_index" not in st.session_state:
             st.session_state["rewrite_curr_index"] = 0
         curr_index = st.session_state["rewrite_curr_index"]
-        ph.text_area(label="Suggestions", height=150, value=suggestions[curr_index])
+        ph.text_area(label="Suggestions", value=suggestions[curr_index])
 
         col1, col2, col3, *_ = st.columns([1, 1, 1, 10])
         with col1:
