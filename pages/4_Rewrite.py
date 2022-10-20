@@ -1,5 +1,3 @@
-import random
-
 import requests
 import streamlit as st
 
@@ -10,7 +8,6 @@ from utils.studio_style import apply_studio_style
 # API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
 import os
 API_KEY = os.getenv("API_KEY")
-DUMMIES_LIST = ["Dummy1", "Dummy2", "Dummy3", "Dummy4"]
 
 
 @st.cache(show_spinner=False)
@@ -63,16 +60,9 @@ if __name__ == '__main__':
         horizontal=True
     )
 
-    # col1, *_ = st.columns(4)
-    # with col1:
-        # intent = st.selectbox(
-        #     "Rewrite intent",
-        #     ("general", "formal", "casual", "long", "short"),
-        # )
     st.button(label="Rewrite", on_click=lambda: get_suggestions(text, intent=intent))
     if "rewrite_rewritten_texts" in st.session_state:
         suggestions = st.session_state["rewrite_rewritten_texts"]
-        st.markdown(body='* ' + '\n* '.join(suggestions))
 
         ph = st.empty()
         if "rewrite_curr_index" not in st.session_state:
@@ -80,9 +70,11 @@ if __name__ == '__main__':
         curr_index = st.session_state["rewrite_curr_index"]
         ph.text_area(label="", value=suggestions[curr_index])
 
-        col1, col2, col3, col4 = st.columns([0.5, 0.5, 4, 4])
+        col1, col2, col3, *_ = st.columns([1, 1, 1, 10])
         with col1:
             st.button("<", on_click=show_prev, args=(len(suggestions),))
         with col2:
+            st.markdown(f"{curr_index+1}/{len(suggestions)}")
+        with col3:
             st.button(">", on_click=show_next, args=(len(suggestions),))
 
