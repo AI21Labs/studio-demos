@@ -4,10 +4,10 @@ def apply_studio_style():
     st.markdown(
         """
         <style>
-           @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+           @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 
             html, body, [class*="css"]  {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Open Sans', sans-serif;
 			}
         </style>
     """,
