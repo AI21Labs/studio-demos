@@ -5,9 +5,7 @@ from utils.completion import _full_url
 from utils.studio_style import apply_studio_style
 
 
-# API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
-import os
-API_KEY = os.getenv("API_KEY")
+API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
 
 
 @st.cache(show_spinner=False)
@@ -60,7 +58,7 @@ if __name__ == '__main__':
         horizontal=True
     )
 
-    st.button(label="Rewrite", on_click=lambda: get_suggestions(text, intent=intent))
+    st.button(label="Rewrite ✍️", on_click=lambda: get_suggestions(text, intent=intent))
     if "rewrite_rewritten_texts" in st.session_state:
         suggestions = st.session_state["rewrite_rewritten_texts"]
 
@@ -68,7 +66,7 @@ if __name__ == '__main__':
         if "rewrite_curr_index" not in st.session_state:
             st.session_state["rewrite_curr_index"] = 0
         curr_index = st.session_state["rewrite_curr_index"]
-        ph.text_area(label="", value=suggestions[curr_index])
+        ph.text_area(label="Suggestions", value=suggestions[curr_index])
 
         col1, col2, col3, *_ = st.columns([1, 1, 1, 10])
         with col1:
