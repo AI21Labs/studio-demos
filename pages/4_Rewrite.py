@@ -51,6 +51,9 @@ if __name__ == '__main__':
                          placeholder="Let's set up a meeting to discuss opportunities using AI21 Studio",
                          value="Let's set up a meeting to discuss opportunities using AI21 Studio").strip()
 
+    if len(text) > 500:
+        st.error("Maximum text length is 500 characters")
+
     intent = st.radio(
         "Set rewrite intent 👉",
         key="intent",
