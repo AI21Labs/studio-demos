@@ -257,6 +257,7 @@ if __name__ == '__main__':
 
     st.title("Blog Post Generation")
     st.markdown("###### Generating a blog post based on a title")
+    st.markdown("This is a limited demonstration of AI21 Studio long-form text capabilities in the form of blog generation. If you are interested in learning more, contact us at studio@ai21.com")
     st.markdown("#### Blog Title")
     title = st.text_input(label="Write your blog post title", placeholder="",
                           value="5 Strategies to overcome writer's block").strip()
