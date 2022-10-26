@@ -95,19 +95,19 @@ def init_demo(custom_demo):
 if __name__ == '__main__':
 
     apply_studio_style()
-    custom_demo = "shoe_la_la"
+    custom_demo = "fortune_teller"
     init_demo(custom_demo)
-
+    st.session_state['model'] = 'experimental/j1-grande-instruct'
     st.session_state['bot_name'] = st.session_state['custom_participants'][0]
     st.session_state['user_name'] = st.session_state['custom_participants'][1]
     st.session_state['fewshot'] = st.session_state['custom_examples']
     st.session_state['background'] = st.session_state['custom_background']
+
     st.session_state['greeting'] = st.session_state['custom_greeting']
 
-    st.title("Shoe store support chatbot")
-
-    st.subheader("Model")
-    st.session_state['model'] = st.selectbox(label='Select your preferred AI21 model', options=['j1-jumbo', 'experimental/j1-grande-instruct', 'j1-grande', 'j1-large'])
+    st.write('')
+    st.write("This is a demonstration of using our models to create a conversational experience. In this case, you can chat with Ella the fortune teller.")
+    st.write("Ask Ella about your future and see what she says!")
 
     if 'messages' not in st.session_state:
         reset_chat()
@@ -115,6 +115,11 @@ if __name__ == '__main__':
         st.session_state['display'] = {}
 
     st.write("--------------------------------")
+
+    if custom_demo == "fortune_teller":
+        st.session_state['user_gender'] = st.radio("User gender:", ('Female', 'Male', 'Other'), horizontal=True)
+        st.session_state['background'] += f"User gender: {st.session_state['user_gender']}.\n\n"
+
     st.subheader("Chat")
     st.session_state['display'][0] = {}
     st.session_state['display'][0]["cols"] = st.empty()
