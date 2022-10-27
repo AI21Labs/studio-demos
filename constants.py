@@ -201,3 +201,43 @@ CLASSIFICATION_PROMPT="""Classify the following news article into one of the fol
 CLASSIFICATION_TITLE = "D.C. Unveils Stadium Plan"
 
 CLASSIFICATION_SUMMARY = "Rumors spread that Major League Baseball is edging closer to moving the Expos to Washington as D.C. officials announce plans for a stadium on the Anacostia waterfront."
+
+CODE_GENERATION_FEW_SHOT = """
+Create a regular expression that extracts email addresses from strings:
+Expression: /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+
+##
+
+Create a regular expression that validate a password contains at least 8 characters, one uppercase letter and a number:
+Expression: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/g
+
+##
+
+Create a regular expression that finds non-ASCII characters:
+Expression: [^\x00-\x7F]
+
+##
+
+Create a regular expression to match HTML tags:
+Expression: /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/
+
+##
+
+Create a regular expression to validate an IP address:
+Expression: ^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$
+
+##
+
+
+"""
+
+CODE_GENERATIONS_EXAMPLES = [
+    "Select Instruction...",
+    "Create a regular expression that checks if a date is entered in 'YYYY–MM–DD' format",
+    "Create a regular expression to find the end of a sentence",
+    "Create a regular expression that finds hebrew characters in text",
+    "Create a regular expression that checks the text contains at least one special character",
+    "Create a regular expression to validate a phone number"
+]
+
+CODE_GENERATION_CUSTOM_PROMPT_PLACEHOLDER = "Create a regular expression..."
