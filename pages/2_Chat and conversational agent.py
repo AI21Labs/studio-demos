@@ -31,7 +31,7 @@ def query(prompt):
         "topP": 0.9,
         "stopSequences": [f"{st.session_state['bot_name']}:", f"{st.session_state['user_name']}:", "##"]
     }
-    res = complete(model_type=st.session_state['model'],
+    res = complete(model_type=st.session_state['fortune_teller_model'],
                    prompt=prompt,
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     apply_studio_style()
     custom_demo = "fortune_teller"
     init_demo(custom_demo)
-    st.session_state['model'] = 'experimental/j1-grande-instruct'
+    st.session_state['fortune_teller_model'] = 'experimental/j1-grande-instruct'
     st.session_state['bot_name'] = st.session_state['custom_participants'][0]
     st.session_state['user_name'] = st.session_state['custom_participants'][1]
     st.session_state['fewshot'] = st.session_state['custom_examples']
@@ -105,7 +105,6 @@ if __name__ == '__main__':
 
     st.session_state['greeting'] = st.session_state['custom_greeting']
 
-    st.write('')
     st.write("This is a demonstration of using our models to create a conversational experience. In this case, you can chat with Ella the fortune teller.")
     st.write("Ask Ella about your future and see what she says!")
 

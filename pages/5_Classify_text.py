@@ -12,7 +12,7 @@ def query(prompt):
         "temperature": 0,
         "stopSequences": ["==="]
     }
-    res = complete(model_type=st.session_state['model'],
+    res = complete(model_type=st.session_state['classification_model'],
                    prompt=prompt,
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
@@ -23,12 +23,8 @@ if __name__ == '__main__':
 
     apply_studio_style()
     st.title("Topic Classification")
+    st.session_state['classification_model'] = 'j1-jumbo'
 
-    st.subheader("Model")
-    st.session_state['model'] = st.selectbox(label="Select your preferred AI21 model",
-                                             options=['j1-jumbo', 'experimental/j1-grande-instruct', 'j1-grande', 'j1-large'])
-
-    st.write("--------------------------------")
     st.text(CLASSIFICATION_PROMPT)
     classification_title = st.text_input(label="Title:", value=CLASSIFICATION_TITLE)
     classification_summary = st.text_area(label="Summary:", value=CLASSIFICATION_SUMMARY, height=100)
