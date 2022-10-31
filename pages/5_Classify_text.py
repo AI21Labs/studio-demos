@@ -2,7 +2,7 @@ import streamlit as st
 
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
-from constants import CLASSIFICATION_FEWSHOT, CLASSIFICATION_PROMPT, CLASSIFICATION_TITLE, CLASSIFICATION_SUMMARY
+from constants import CLASSIFICATION_FEWSHOT, CLASSIFICATION_PROMPT, CLASSIFICATION_TITLE, CLASSIFICATION_DESCRIPTION
 
 
 def query(prompt):
@@ -27,12 +27,12 @@ if __name__ == '__main__':
 
     st.text(CLASSIFICATION_PROMPT)
     classification_title = st.text_input(label="Title:", value=CLASSIFICATION_TITLE)
-    classification_summary = st.text_area(label="Summary:", value=CLASSIFICATION_SUMMARY, height=100)
+    classification_description = st.text_area(label="Description:", value=CLASSIFICATION_DESCRIPTION, height=100)
 
     if st.button(label="Classify"):
         with st.spinner("Loading..."):
             classification_prompt = f"{CLASSIFICATION_PROMPT}\nTitle:\n{classification_title}" \
-                                    f"Summary:\n{classification_summary}The topic of this article is:\n"
+                                    f"Description:\n{classification_description}The topic of this article is:\n"
             st.session_state["classification_result"] = query(CLASSIFICATION_FEWSHOT + classification_prompt)
 
     if "classification_result" in st.session_state:

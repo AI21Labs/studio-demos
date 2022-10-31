@@ -200,7 +200,7 @@ CLASSIFICATION_PROMPT="""Classify the following news article into one of the fol
 
 CLASSIFICATION_TITLE = "D.C. Unveils Stadium Plan"
 
-CLASSIFICATION_SUMMARY = "Rumors spread that Major League Baseball is edging closer to moving the Expos to Washington as D.C. officials announce plans for a stadium on the Anacostia waterfront."
+CLASSIFICATION_DESCRIPTION = "Rumors spread that Major League Baseball is edging closer to moving the Expos to Washington as D.C. officials announce plans for a stadium on the Anacostia waterfront."
 
 CODE_GENERATION_FEW_SHOT = """
 Create a regular expression that extracts email addresses from strings:
