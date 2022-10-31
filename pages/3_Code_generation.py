@@ -41,10 +41,11 @@ if __name__ == '__main__':
     st.text("")
     st.markdown("###### Use large-language models to transform an instruction in natural language to a regular expression (regex).")
     st.text("")
+    st.session_state["prompt"] = st.text_input(label="Type in your instruction", value=st.session_state["curr_prompt"])
     st.selectbox(label="Select one instruction from the drop-down menu:",
                           options=CODE_GENERATIONS_EXAMPLES, on_change=set_new_prompt, key="prompt_select_box_key").strip()
 
-    st.session_state["prompt"] =  st.text_input(label="Type in your instruction", value=st.session_state["curr_prompt"])
+
 
 
     st.text("")
