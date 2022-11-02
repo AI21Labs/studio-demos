@@ -108,7 +108,7 @@ User gender: Female.
 Conversation:
 Ella: What would like to know, my dear?
 User: Well, yesterday I received a job offer, should i accept it?
-Fortune teller: Hmm, let me see... I can see you're not working at the moment
+Ella: Hmm, let me see... I can see you're not working at the moment
 User: Exactly, I'm looking for a job
 Ella: I can see that you're a very creative girl
 User: Well, yes i am, I like writing and painting... but this position is in an export company... it doesn't sound very creative..
