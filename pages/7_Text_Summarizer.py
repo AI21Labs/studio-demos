@@ -11,6 +11,10 @@ Deloitte Private’s latest global survey of private enterprises reveals that ex
 
 API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
 
+st.set_page_config(
+    page_title="Text Summarizer",
+)
+
 
 @st.cache(show_spinner=False)
 def summarize(text, api_key, env="production"):
@@ -33,8 +37,9 @@ def get_summary(text):
 if __name__ == '__main__':
     apply_studio_style()
 
-    st.title("Summarize text")
-    text = st.text_area(label="Insert your text here",
+    st.title("Text Summarizer")
+    st.write("Effortlessly transform lengthy material into a focused summary. Whether it’s an article, research paper or even your own notes -  this tool will sum up the key points!")
+    text = st.text_area(label="Paste your text here:",
                         height=400,
                         value=PLACEHOLDER_TEXT).strip()
 

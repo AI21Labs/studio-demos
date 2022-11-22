@@ -4,6 +4,10 @@ from utils.completion import complete
 from utils.studio_style import apply_studio_style
 from constants import CLASSIFICATION_FEWSHOT, CLASSIFICATION_PROMPT, CLASSIFICATION_TITLE, CLASSIFICATION_DESCRIPTION
 
+st.set_page_config(
+    page_title="Topic Classifier",
+)
+
 
 def query(prompt):
     config = {
@@ -22,7 +26,8 @@ def query(prompt):
 if __name__ == '__main__':
 
     apply_studio_style()
-    st.title("Topic Classification")
+    st.title("The Topic Classifier")
+    st.write("Read any interesting news lately? Let's see if our topic classifier can skim through it and identify whether its category is sports, business, world news, or science and technology.")
     st.session_state['classification_model'] = 'j1-jumbo'
 
     st.text(CLASSIFICATION_PROMPT)

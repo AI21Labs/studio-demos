@@ -7,8 +7,7 @@ from utils.completion import complete
 from utils.studio_style import apply_studio_style
 
 st.set_page_config(
-    page_title="Streamlit Chat - Demo",
-    page_icon=":robot:"
+    page_title="Conversational AI",
 )
 
 
@@ -105,8 +104,9 @@ if __name__ == '__main__':
 
     st.session_state['greeting'] = st.session_state['custom_greeting']
 
-    st.write("This is a demonstration of using our models to create a conversational experience. In this case, you can chat with Ella the fortune teller.")
-    st.write("Ask Ella about your future and see what she says!")
+    st.title("Conversational AI")
+    st.write("We see conversational AI in your future and so does Ella, our AI fortune teller! This interactive demo illustrates how our model can be used to create a realistic conversational experience.")
+    st.write("Curious to hear your fortune? Ask Ella anything and she'll consult her crystal ball 🔮")
 
     if 'messages' not in st.session_state:
         reset_chat()
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     st.write("--------------------------------")
 
     if custom_demo == "fortune_teller":
-        st.session_state['user_gender'] = st.radio("User gender:", ('Female', 'Male', 'Other'), horizontal=True)
+        st.session_state['user_gender'] = st.radio("Select your gender:", ('Female', 'Male', 'Other'), horizontal=True)
         st.session_state['background'] += f"User gender: {st.session_state['user_gender']}.\n\n"
 
     st.subheader("Chat")
@@ -139,7 +139,7 @@ if __name__ == '__main__':
                 if st.button(label="Regenerate", key=str(i) + "regen"):
                     regenerate_completion()
                     st.experimental_rerun()
-    st.text_input(label="Enter text:", on_change=add_input, key='text_input')
+    st.text_input(label="Discover what your future holds by asking Ella your questions here:", on_change=add_input, key='text_input')
 
     st.write("--------------------------------")
     if st.button(label="Reset conversation", on_click=reset_chat):

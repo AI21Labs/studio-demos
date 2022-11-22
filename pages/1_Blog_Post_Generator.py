@@ -7,6 +7,11 @@ from utils.studio_style import apply_studio_style
 import argparse
 from utils.completion import complete, async_complete
 
+st.set_page_config(
+    page_title="Blog Post Generator",
+)
+
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--port',
@@ -255,11 +260,10 @@ if __name__ == '__main__':
     if 'generated_sections_data' not in st.session_state:
         st.session_state['generated_sections_data'] = {}
 
-    st.title("Blog Post Generation")
-    st.markdown("###### Generating a blog post based on a title")
-    st.markdown("This is a limited demonstration of AI21 Studio long-form text capabilities in the form of blog generation. If you are interested in learning more, contact us at studio@ai21.com")
+    st.title("Blog Post Generator")
+    st.markdown("Using only a title, you can instantly generate an entire article with the click of a button! Simply select your topic and this tool will create an engaging article from beginning to end.")
     st.markdown("#### Blog Title")
-    title = st.text_input(label="Write your blog post title", placeholder="",
+    title = st.text_input(label="Write the title of your article here:", placeholder="",
                           value="5 Strategies to overcome writer's block").strip()
     st.markdown("#### Blog Outline")
     st.text("Click the button to generate the blog outline")
@@ -273,7 +277,7 @@ if __name__ == '__main__':
         st.text("Unsatisfied with the generated outline? Click the 'Generate Outline' button again to re-generate it, or edit it inline.")
 
         st.markdown("#### Blog Sections")
-        st.text("Click the button to generate the blog sections from the outline")
+        st.text("Click the button to effortlessly generate an outline for your blog post:")
         st.button(label="Generate Sections", on_click=build_event_loop(title, sections, num_results))
 
     if st.session_state['show_sections']:

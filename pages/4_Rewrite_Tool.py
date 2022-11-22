@@ -7,6 +7,9 @@ from utils.studio_style import apply_studio_style
 
 API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
 
+st.set_page_config(
+    page_title="Rewrite Tool",
+)
 
 @st.cache(show_spinner=False)
 def rewrite(text, api_key, intent="general", span_start=0, span_end=None, env="production"):
@@ -46,14 +49,15 @@ def show_prev(cycle_length):
 if __name__ == '__main__':
     apply_studio_style()
 
-    st.title("Rewrite text")
-    text = st.text_area(label="Insert your text here",
+    st.title("The Rewrite Tool")
+    st.write("Rephrase with ease! Find fresh new ways to reword your sentences with an AI writing companion that paraphrases & rewrites any text. Select rewrite suggestions that clearly convey your ideas with a range of different tones to choose from.")
+    text = st.text_area(label="Write your text here to see what the rewrite tool can do:",
                          max_chars=500,
                          placeholder="Let's set up a meeting to discuss opportunities using AI21 Studio",
                          value="Let's set up a meeting to discuss opportunities using AI21 Studio").strip()
 
     intent = st.radio(
-        "Set rewrite intent 👉",
+        "Set your tone 👉",
         key="intent",
         options=["general", "formal", "casual", "long", "short"],
         horizontal=True
