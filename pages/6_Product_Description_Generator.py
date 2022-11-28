@@ -1,5 +1,5 @@
 import streamlit as st
-
+from constants import PRODUCT_DESCRIPTION_FEW_SHOT
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
 
@@ -50,7 +50,6 @@ def query(prompt):
     return res["completions"][0]["data"]["text"]
 
 
-
 if __name__ == '__main__':
 
     apply_studio_style()
@@ -61,10 +60,7 @@ if __name__ == '__main__':
     product_input = st.text_input("Enter the name of your product:", value="Talking Picture Oxford Flat")
     features = st.text_area("List your product features here:", value="- Flat shoes\n- Amazing chestnut color\n- Man made materials")
 
-
-    prompt = f"Write product descriptions for fashion eCommerce site based on a list of features.\nProduct: On Every Spectrum Fit and Flare Dress\nFeatures:\n- Designed by Retrolicious\n- Stretch cotton fabric\n- Side pockets\n- Rainbow stripes print\nDescription: In a bold rainbow-striped print, made up of exceptionally vibrant hues, this outstanding skater dress from Retroliciousis on every spectrum of vintage-inspired style. Made from a stretchy cotton fabric and boasting a round neckline, a sleeveless fitted bodice, and a gathered flare skirt with handy side pockets, this adorable fit-and-flare dress is truly unique and so retro-chic.\n\n##\n\nWrite product descriptions for fashion eCommerce site based on a list of features.\nProduct: Camp Director Crossbody Bag\nFeatures:\n- Black canvas purse\n- Rainbow space print\n- Leather trim\n- Two securely-zipped compartments\nDescription: Take a bit of camp charm with you wherever you go with this black canvas purse! Adorned with a rainbow space motif print, black faux-leather trim, two securely-zipped compartments, and adjustable crossbody strap, this ModCloth-exclusive bag makes sure you command a smile wherever you wander.\n\n##\n\nWrite product descriptions for fashion eCommerce site based on a list of features.\nProduct: {product_input}\nFeatures:\n{features}\nDescription:"
-
-
+    prompt = PRODUCT_DESCRIPTION_FEW_SHOT + f"Product: {product_input}\nFeatures:\n{features}\nDescription:"
 
     if st.button(label="Generate Description"):
         st.session_state["short-form-save_results_ind"] = []

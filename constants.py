@@ -241,3 +241,155 @@ CODE_GENERATIONS_EXAMPLES = [
 ]
 
 CODE_GENERATION_CUSTOM_PROMPT_PLACEHOLDER = "Create a regular expression..."
+
+PRODUCT_DESCRIPTION_FEW_SHOT = '''Write product descriptions for fashion eCommerce site based on a list of features.
+Product: On Every Spectrum Fit and Flare Dress
+Features:
+- Designed by Retrolicious
+- Stretch cotton fabric
+- Side pockets
+- Rainbow stripes print
+Description: In a bold rainbow-striped print, made up of exceptionally vibrant hues, this outstanding skater dress from Retroliciousis on every spectrum of vintage-inspired style. Made from a stretchy cotton fabric and boasting a round neckline, a sleeveless fitted bodice, and a gathered flare skirt with handy side pockets, this adorable fit-and-flare dress is truly unique and so retro-chic.
+
+##
+
+Write product descriptions for fashion eCommerce site based on a list of features.
+Product: Camp Director Crossbody Bag
+Features:
+- Black canvas purse
+- Rainbow space print
+- Leather trim
+- Two securely-zipped compartments
+Description: Take a bit of camp charm with you wherever you go with this black canvas purse! Adorned with a rainbow space motif print, black faux-leather trim, two securely-zipped compartments, and adjustable crossbody strap, this ModCloth-exclusive bag makes sure you command a smile wherever you wander.
+
+##
+
+Write product descriptions for fashion eCommerce site based on a list of features.'''
+
+WEBSITE_DESCRIPTION_FEW_SHOT = '''Write an engaging business description for the following company.
+
+Name of Business: Juliana Laface Design
+Location: Edmonton, AB, Canada
+Services:
+- Web design
+- Branding & logos
+- Digital marketing
+- Graphic design
+
+Important Company Highlights:
+- A small business owner
+- 10 years of experience
+- Small to mid sized businesses web design
+
+Description:
+Every entrepreneur has a goal in mind when marketing their small business. Whether you want to increase your number of monthly website visitors, improve online sales, or book more consultations— you want to see a return on your investment.
+As an Edmonton website designer, graphic designer and brand creator who also happens to be a small business owner, I have carefully considered each of my services, honing in on the offerings that provide my clients with the greatest gains.
+Ultimately, I want to provide you with an unforgettable design, because that’s what I would want for my own business.
+
+##
+
+Write an engaging business description for the following company. 
+
+Name of Business: Concept Marketing Group
+Location: New York
+Services:
+- Targeted licensing
+- Direct-to-retail
+
+Important Company Highlights:
+- Recognized leader
+
+Description:
+Concept Marketing Group is a full-service licensing agency and recognized leader in targeted licensing, direct-to-retail, and other brand extension initiatives. Our experienced team provides valuable insight and guidance to licensee and licensor.
+National and international icons of fashion, interior design and home furnishings, as well as charitable organizations have entrusted us with their brands.
+
+##
+
+Write an engaging business description for the following company. 
+
+Name of Business: The Frosting Room 
+Location: Australia, Sydney
+Services:
+- Coffee
+- Lunch
+- Bagels
+- Granola
+
+Company Highlights:
+- One-stop shop
+- Grab 'n' go
+
+Description:
+Founded upon a passion for food and baking, The Bakery has become a one-stop shop for all kinds of delectable, gorgeous baked goods and then some. We have the perfect cup of coffee, freshly-made lunches and a plethora of tasty take away options, including granola, bagels, specialty breads and pizza.
+If you’re in a hurry, a full palette of grab ‘n’ go desserts (think a giant chocolate cloud of mousse or a strawberry tarte) are available for your spontaneous dinner soiree.
+From day one until today, this is what The Bakery does with a whole lot of love.
+
+##
+
+Write an engaging business description for the following company. 
+
+Name of Business: The Michael Project 
+Location: New York, NY 
+Services:
+- Mentorship
+- Employment
+
+Important Company Highlights:
+- Provides a wide range of affordable services
+- Specializing in helping struggling youth 
+
+Description:
+What began as a small charity helping homeless youth on the streets of New York City, has evolved into one of the largest job training and placement agencies in the Big Apple.
+Our services include career guidance, job search assistance, resume writing, interview preparation and employment placement, as well as programs for at-risk youth, ex-offenders, those with disabilities and transitioning military.
+Our services are offered at affordable rates and one-on-one attention is given to every client during the training process.
+
+##
+
+Write an engaging business description for the following company. 
+
+'''
+
+WEBSITE_HEADLINE_FEW_SHOT = '''Write an engaging headline for the following company.
+
+Name of Business: Juliana Laface Design
+
+Description:
+Every entrepreneur has a goal in mind when marketing their small business. Whether you want to increase your number of monthly website visitors, improve online sales, or book more consultations— you want to see a return on your investment.
+As an Edmonton website designer, graphic designer and brand creator who also happens to be a small business owner, I have carefully considered each of my services, honing in on the offerings that provide my clients with the greatest gains.
+Ultimately, I want to provide you with an unforgettable design, because that’s what I would want for my own business.
+
+Headline:
+Edmonton Website Designer, Graphic Designer & Brand Creator
+
+##
+
+Write an engaging headline for the following company.
+
+Name of Business: Concept Marketing Group
+
+Description:
+Concept Marketing Group is a full-service licensing agency and recognized leader in targeted licensing, direct-to-retail, and other brand extension initiatives. Our experienced team provides valuable insight and guidance to licensee and licensor.
+National and international icons of fashion, interior design and home furnishings, as well as charitable organizations have entrusted us with their brands.
+
+Headline:
+Proven Leaders in Brand Development & Licensing
+
+##
+
+Write an engaging headline for the following company.
+
+Name of Business: The Frosting Room
+
+Description:
+Founded upon a passion for food and baking, The Bakery has become a one-stop shop for all kinds of delectable, gorgeous baked goods and then some. We have the perfect cup of coffee, freshly-made lunches and a plethora of tasty take away options, including granola, bagels, specialty breads and pizza.
+If you’re in a hurry, a full palette of grab ‘n’ go desserts (think a giant chocolate cloud of mousse or a strawberry tarte) are available for your spontaneous dinner soiree.
+From day one until today, this is what The Bakery does with a whole lot of love.
+
+Headline:
+One-stop shop for everything delicious
+
+##
+
+Write an engaging headline for the following company.
+
+'''
