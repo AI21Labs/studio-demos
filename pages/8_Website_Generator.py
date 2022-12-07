@@ -26,7 +26,7 @@ def query(prompt, stopSequences=["##"]):
       "stopSequences":stopSequences
     }
 
-    res = complete(model_type="j1-jumbo",
+    res = complete(model_type="experimental/j1-compose",
                    prompt=prompt,
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
