@@ -29,7 +29,7 @@ if __name__ == '__main__':
     st.title("Open Book Question Answering")
     st.write("Ask a question on a given context.")
 
-    obqa_context = st.text_area(label="Context:", value=OBQA_CONTEXT, height=200)
+    obqa_context = st.text_area(label="Context:", value=OBQA_CONTEXT, height=300)
     obqa_question = st.text_input(label="Question:", value=OBQA_QUESTION)
 
     if st.button(label="Answer"):
@@ -38,4 +38,4 @@ if __name__ == '__main__':
             st.session_state["obqa_answer"] = query(obqa_prompt)
 
     if "obqa_answer" in st.session_state:
-        st.subheader(f"Answer: {st.session_state['obqa_answer']}")
+        st.write(f"Answer: {st.session_state['obqa_answer']}")
