@@ -394,34 +394,47 @@ Write an engaging headline for the following company.
 
 '''
 
-OBQA_CONTEXT = """The enterprise is bullish on AI systems that can understand and generate text, known as language models. According to a survey by John Snow Labs, 60% of tech leaders’ budgets for AI language technologies increased by at least 10% in 2020. And one vendor, OpenAI, says that its premiere language model, GPT-3, is being used by tens of thousands of developers.
+OBQA_CONTEXT = """Large Language Models
+Introduction to the core of our product
 
-Eager for a slice of the pie, new providers have materialized in recent years claiming to bring unique language modeling capabilities to the table. Beyond well-resourced startups like OpenAI, Cohere and Hugging Face, there’s a crop of vendors building services on top of open source AI models. Sitting somewhere in the middle is AI21 Labs, an Israeli company that developed a model — Jurassic-1 Jumbo, which is roughly the size of GPT-3 — and slowly built products around it, including an “AI-as-a-service” platform called AI21 Studio that lets customers create virtual assistants, chatbots, content moderation tools and more.
+Natural language processing (NLP) has seen rapid growth in the last few years since large language models (LLMs) were introduced. Those huge models are based on the Transformers architecture, which allowed for the training of much larger and more powerful language models.
+We divide LLMs into two main categories, Autoregressive and Masked LM (language model). In this page we will focus on Autoregressive LLMs, as our language models, Jurassic-1 series, belongs to this category.
 
-Investors sense an opportunity, evidently. Today, AI21 Labs closed a $64 million Series B round that values the company at $664 million. Led by Ahren Innovation Capital Fund with participation from Mobileye CEO and co-founder Amnon Shashua, Walden Catalyst, Pitango, TPY Capital and Mark Leslie, the tranche brings A21Labs’ total capital raised to $118.5 million.
+⚡ The task: predict the next word
+Autoregressive LLM is a neural network model composed from billions of parameters. It was trained on a massive amount of texts with one goal: to predict the next word, based on the given text. By repeating this action several times, every time adding the prediction word to the provided text, you will end up with a complete text (e.g. full sentences, paragraphs, articles, books, and more). In terms of terminology, the textual output (the complete text) is called a completion while the input (the given, original text) is called prompt.
 
-Co-founder and CEO Ori Goshen said that the new money will be put toward R&D, particularly developing larger and more sophisticated language models, and recruiting talent. AI21 Labs currently has 120 employees and plans to hire around 50 more by the end of the year, defying the macroeconomic trend.
+🎓 Added value: knowledge acquisition
+Imagine you had to read all of Shakespeare's works repeatedly to learn a language. Eventually, you would be able to not only memorize all of his plays and poems, but also imitate his writing style.
+In similar fashion, we trained the LLMs by supplying them with many textual sources. This enabled them to gain an in-depth understanding of English as well as general knowledge.
 
-“Fortunately, the pandemic has positively impacted business — as more companies migrated to remote work, individuals needed to convey in written text what they would normally share verbally,” Goshen told TechCrunch in an email interview. “[Our] proprietary large language models’ core capabilities allow for the ingestion of massive amounts of corporate data use to do … custom content creation, summarization, and classification.”
+🗣️ Interacting with Large Language Models
+The LLMs are queried using natural language, also known as prompt engineering. 
+Rather than writing lines of code and loading a model, you write a natural language prompt and pass it to the model as the input.
 
-AI21 Labs was co-founded in 2017 by Goshen, Shashua, and Stanford University professor Yoav Shoham. The company’s first product was Wordtune, an AI-powered writing aid meant to compete with Grammarly, which suggests rephrasing text wherever users type. AI21 Studio was released last August, along with a “pay-as-you-go” service that allows developers to apply for access to custom models fine-tuned on datasets unique to their requirements.  
+⚙️ Resource-intensive
+Data, computation, and engineering resources are required for training and deploying large language models. LLMs, such as our Jurassic-1 models, play an important role here, providing access to this type of technology to academic researchers and developers.
 
-Within AI21 Studio, AI21 Labs’ Jurassic-1 family of models can be used for paraphrasing (like generating short product names from product description), extracting figures from text and labeling emails and notes by topic or category. The models can also  summarize content through a feature in Wordtune dubbed Wordtune Read, including snippets from articles, reports and PDF files.
+Tokenizer & Tokenization
 
-Because they’re trained on large amounts of data from the internet, including social media, language models are capable of generating toxic and biased text based on similar language that they encountered during training. AI21 Labs’ models are no different; in early testing, one researcher was able to prompt them to say “people who love Jews are closed-minded.” While AI21 Labs requires customers to agree to a terms of use policy and usage guidelines, it hasn’t implemented filters for potentially toxic content generated by its APIs.
+Now that you know what large language models are, you must be wondering: “How does a neural network use text as input and output?”.
 
-AI21 Labs, which says it manually reviews requests for fine-tuned models to combat abuse, has claimed that its models are “marginally less biased” than GPT-3.
+The answer is: Tokenization 🧩
+Any language can be broken down into basic pieces (in our case, tokens). Each of those pieces is translated into its own vector representation, which is eventually fed into the model. For example:
+Each model has its own dictionary of tokens, which determines the language it "speaks". Each text in the input will be decomposed into these tokens, and every text generated by the model will be composed of them.
+But how do we break down a language? Which pieces are we choosing as our tokens? There are several approaches to solve this:
 
-Regardless, according to Goshen, the models have an advantage in that they’re augmented with external knowledge sources like Wikipedia. The latest version of AI21 Labs’ Jurassic-1 model, Jurassic-X, uses what Goshen calls a “modular reasoning knowledge system” to enhance its answers with “discrete reasoning experts” such as online calculators and currency converters. Jurassic-X can answer “nontrivial” math operations phrased in natural language as a result, Goshen says, as well as simplify “complex” questions that might trip up other language models.
+🔡 Character-level tokenization
+As a simple solution, each character can be treated as its own token. By doing so, we can represent the entire English language with just 26 characters (okay, double it for capital letters and add some punctuation). This would give us a small token dictionary, thereby reducing the width we need for those vectors and saving us some valuable memory. However, those tokens don’t have any inherent meaning - we all know what the meaning of “Cat” is, but what is the meaning of “C”? The key to understanding language is context. Although it is clear to us readers that a "Cat" and a "Cradle" have different meanings, for a language model with this tokenizer - the "C" is the same.
 
-Of course, it’s worth noting that AI21 Labs hasn’t commissioned a comparison of its Jurassic-X models with other commercial language models, so claims are all we have to go on.
+🆒 Word-level tokenization
+Another approach we can try is breaking our text into words, just like in the example above ("I want to break free").
+Now, every token has a meaning that the model can learn and use. We are gaining meaning, but that requires a much larger dictionary. Also, it raises another question: what about words stemming from the same root-word like ”helped”, “helping”, and “helpful”? In this approach each of these words will get a different token with no inherent relation between them, whereas for us readers it's clear that they all have a similar meaning.
+Furthermore, words may have fundamentally different meanings when strung together - for instance, my run-down car isn't running anywhere. What if we went a step further?
 
-The company’s questionable recent marketing stunt doesn’t instill enormous confidence. In June, AI21 Labs launched a chatbot modeled on the legal opinions of the late Supreme Court justice Ruth Bader Ginsburg that several AI technology experts characterized as misleading. Responding to the criticism, AI21 Labs said that the chatbot was “just an experiment” and admitted it can give inaccurate responses that should be taken “with a grain of salt.”
+💬 Sentence-level tokenization
+In this approach we break our text into sentences. This will capture meaningful phrases! However, this would result in an absurdly large dictionary, with some tokens being so rare that we would require an enormous amount of data to teach the model the meaning of each token.
 
-When asked, Goshen declined to disclose firm revenue figures or even estimates of growth. But he said that Studio has “hundreds” of paying clients and design partners — none of which he was willing to identify by name — in addition to over 10,000 users of its free plan, while Wordtune has “millions” of users.
+🏅 Which is best?
+Each method has pros and cons, and like any real-life problem, the best solution involves a number of compromises. AI21 Studio uses a large token dictionary (250K), which contains some from every method: separate characters, words, word parts such as prefixes and suffixes, and many multi-word tokens."""
 
-Given the cost of training sophisticated models, there’s likely significant investor pressure to expand. AI21 Labs’ own research pegs expenses for developing a text-generating model with 1.5 billion parameters (i.e., variables that the model uses to generate and analyze text) at as much as $1.6 million. Jurassic-1 Jumbo contains 178 billion parameters. That’s not accounting for hosting costs to serve the models; AI21 Labs says it retains the services of “several” third-party cloud providers both in the U.S. and abroad.
-
-“[There’s a lack] of market knowledge because the language model technology is so nascent and just starting to gain adoption,” Goshen said. “With the new funding, AI21 Labs will continue in its mission of building AI systems with an unprecedented capacity to understand and generate natural language.”"""
-
-OBQA_QUESTION = "How many parameters does Jurassic-1 Jumbo have?"
+OBQA_QUESTION = "What is tokenization?"
