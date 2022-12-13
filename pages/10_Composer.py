@@ -72,6 +72,10 @@ if __name__ == '__main__':
                      value=PROMPT_EXAMPLES[content_type],
                      placeholder=content_type).strip()
 
+    if not any(prompt.endswith(i) for i in '.?!'):
+        prompt += '.'
+    prompt += '\n'
+
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
             generate(prompt, category=content_type)
