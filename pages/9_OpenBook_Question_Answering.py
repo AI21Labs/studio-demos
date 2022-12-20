@@ -28,7 +28,7 @@ if __name__ == '__main__':
     apply_studio_style()
     st.title("Open Book Question Answering")
 
-    st.session_state['obqa_custom_model'] = st.selectbox(options=OBQA_MODELS)
+    st.session_state['obqa_custom_model'] = st.selectbox(label="Model", options=OBQA_MODELS)
 
     st.write("Ask a question on a given context.")
 
