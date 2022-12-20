@@ -438,3 +438,4 @@ In this approach we break our text into sentences. This will capture meaningful 
 Each method has pros and cons, and like any real-life problem, the best solution involves a number of compromises. AI21 Studio uses a large token dictionary (250K), which contains some from every method: separate characters, words, word parts such as prefixes and suffixes, and many multi-word tokens."""
 
 OBQA_QUESTION = "What is tokenization?"
+OBQA_MODELS = ["OpenBookQA_v1.0", "OpenBookQA_v1.1"]

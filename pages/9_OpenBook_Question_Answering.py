@@ -2,7 +2,7 @@ import streamlit as st
 
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
-from constants import OBQA_CONTEXT, OBQA_QUESTION
+from constants import OBQA_CONTEXT, OBQA_QUESTION, OBQA_MODELS
 
 st.set_page_config(
     page_title="OpenBookQA",
@@ -16,7 +16,7 @@ def query(prompt):
         "temperature": 0
     }
     res = complete(model_type='j1-grande',
-                   custom_model='OpenBookQA_v1.0',
+                   custom_model=st.session_state['obqa_custom_model'],
                    prompt=prompt,
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
@@ -27,6 +27,9 @@ if __name__ == '__main__':
 
     apply_studio_style()
     st.title("Open Book Question Answering")
+
+    st.session_state['obqa_custom_model'] = st.selectbox(options=list(OBQA_MODELS))
+
     st.write("Ask a question on a given context.")
 
     obqa_context = st.text_area(label="Context:", value=OBQA_CONTEXT, height=300)
