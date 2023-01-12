@@ -1,34 +1,28 @@
 import streamlit as st
-
-from utils.completion import complete
+import requests
 from utils.studio_style import apply_studio_style
-from constants import OBQA_CONTEXT, OBQA_QUESTION, OBQA_MODELS
+from constants import OBQA_CONTEXT, OBQA_QUESTION
 
 st.set_page_config(
     page_title="OpenBookQA",
 )
 
+endpoint = "https://api.ai21.com/studio/v1/experimental/open-book-qa"
 
-def query(prompt):
-    config = {
-        "numResults": 1,
-        "maxTokens": 200,
-        "temperature": 0
-    }
-    res = complete(model_type='j1-grande',
-                   custom_model=st.session_state['obqa_custom_model'],
-                   prompt=prompt,
-                   config=config,
-                   api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
-    return res["completions"][0]["data"]["text"]
+
+def query(context, question):
+    auth_header = "Bearer " + st.secrets['api-keys']['ai21-algo-team-prod']
+    res = requests.post(endpoint,
+                        headers={"Authorization": auth_header},
+                        json={"context": context, "question": question})
+    res = res.json()
+    return res["answer"]
 
 
 if __name__ == '__main__':
 
     apply_studio_style()
     st.title("Open Book Question Answering")
-
-    st.session_state['obqa_custom_model'] = st.selectbox(label="Model", options=OBQA_MODELS)
 
     st.write("Ask a question on a given context.")
 
@@ -37,8 +31,7 @@ if __name__ == '__main__':
 
     if st.button(label="Answer"):
         with st.spinner("Loading..."):
-            obqa_prompt = f"question:\n{obqa_question}\n\ncontext:\n{obqa_context}\n\nquestion:\n{obqa_question}\nanswer:\n"
-            st.session_state["obqa_answer"] = query(obqa_prompt)
+            st.session_state["obqa_answer"] = query(obqa_context, obqa_question)
 
     if "obqa_answer" in st.session_state:
         st.write(f"Answer: {st.session_state['obqa_answer']}")
