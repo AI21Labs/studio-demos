@@ -11,7 +11,7 @@ st.set_page_config(
 MODEL_CONF = {
     "maxTokens": 200,
     "temperature": 0.8,
-    "numResults": 15
+    "numResults": 16
     # "logitBias": {'<|endoftext|>': -5}
 }
 
@@ -155,16 +155,15 @@ if __name__ == '__main__':
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
             generate(prompt, category=category, model=model)
+            st.session_state['index'] = 0
 
     if 'completions' in st.session_state:
         if len(st.session_state['completions']) == 0:
             st.write("Please try again 😔")
 
         else:
-            if 'index' not in st.session_state:
-                st.session_state['index'] = 0
-
             curr_text = st.session_state['completions'][st.session_state['index']]
             st.text_area(label=f'Generated {content_type}', value=curr_text.strip(), height=height)
             st.write(f"Number of words: {len(curr_text.split())}")
-            toolbar()
+            if len(st.session_state['completions']) > 1:
+                toolbar()
