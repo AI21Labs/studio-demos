@@ -2,6 +2,7 @@ import streamlit as st
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
 import re
+import requests
 
 st.set_page_config(
     page_title="Marketing Generator",
@@ -14,11 +15,20 @@ MODEL_CONF = {
     # "logitBias": {'<|endoftext|>': -5}
 }
 
-LENGTH_LIMITS = {
+TOKENS_LIMITS = {
+    "byline": (100, 500),
     "pitch": (20, 150),
-    "instagram post": (5, 100),
-    "tweet": (5, 100),
-    "linkedin post": (20, 200),
+    "instagram": (5, 100),
+    "twitter": (5, 100),
+    "linkedin": (20, 200),
+}
+
+WORDS_LIMIT = {
+    "byline": (500, 700),
+    "pitch": (150, 200),
+    "instagram": (5, 100),
+    "twitter": (5, 100),
+    "linkedin": (20, 200),
 }
 
 title_placeholder = "PetSmart Charities® Commits $100 Million to Improve Access to Veterinary Care"
@@ -53,17 +63,23 @@ def annonymize(text):
     return re.sub(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', '[EMAIL]', text)
 
 
-def generate(text, category, model_type="experimental/j1-compose", max_retries=5):
-    min_length, max_length = LENGTH_LIMITS[category]
-    completions_filtered = []
-    try_count = 0
-    MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = min_length, max_length
-    while not len(completions_filtered) and try_count < max_retries:
-        res = complete(model_type=model_type,
-                   prompt=text,
+def query(model, prompt):
+    return complete(model_type="experimental/j1-compose",
+                   prompt=prompt,
                    config=MODEL_CONF,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
-        completions_filtered = [comp['data']['text'] for comp in res['completions'] if comp["finishReason"]["reason"] == "endoftext"]
+
+
+def generate(text, category, model, max_retries=5):
+    min_length, max_length = WORDS_LIMIT[category]
+    completions_filtered = []
+    try_count = 0
+    MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = TOKENS_LIMITS[category]
+    while not len(completions_filtered) and try_count < max_retries:
+        res = query(model, prompt)
+        completions_filtered = [comp['data']['text'] for comp in res['completions']
+                                if comp["finishReason"]["reason"] == "endoftext"
+                                and min_length <= len(comp['data']['text'].split()) <= max_length]
         try_count += 1
     st.session_state["prompt"] = text
     st.session_state["completion"] = annonymize(completions_filtered[0])
@@ -71,32 +87,56 @@ def generate(text, category, model_type="experimental/j1-compose", max_retries=5
 
 if __name__ == '__main__':
 
+    model = 'instruct'
     apply_studio_style()
     st.title("Marketing Generator")
 
-    content_type = st.selectbox(
+    content_type = st.radio(
         "Select content type 👉",
         key="content_type",
-        options=list(LENGTH_LIMITS.keys()),
+        options=['Byline', 'Pitch Email', 'Social Media Post'],
     )
+    if content_type == 'Pitch Email':
+        domain = st.radio(
+        "Select domain 👉",
+        options=['Technology', 'Healthcare', 'Venture Funding', 'Other'],
+    )
+    elif content_type == 'Social Media Post':
+        media = st.radio(
+            "Select social media 👉",
+            options=['Instagram', 'Twitter', 'Linkedin'],
+        )
 
     title = st.text_input(label="Title", value=title_placeholder).strip()
     article = st.text_area(label="Article", value=article_placeholder, height=500).strip()
 
-    if content_type == 'pitch':
-        instruction = "Write a pitch to reporters persuading them why they should write about this for their publication."
+    if content_type == 'Pitch Email':
+        model = 'compose'
+        if domain == 'other':
+            instruction = "Write a pitch to reporters persuading them why they should write about this for their publication."
+        else:
+            instruction = f"Write a pitch to reporters that cover {domain} stories persuading them why they should write about this for their publication."
         suffix = "Email Introduction"
+        prompt = f"{instruction}\nTitle: {title}\nPress Release:\n{article}\n\n{suffix}:\n"
+        category = 'pitch'
+        height = 400
+    elif content_type == 'Byline':
+        instruction = f'Write an article titled "{title}" and is based on the following press release.'
+        suffix = "Article"
+        prompt = f"{instruction}\nPress Release:\n{article}\n\n{suffix}:\n"
+        category = 'byline'
+        height = 600
     else:
         instruction = f"Write a {content_type} touting the following press release."
         suffix = content_type
-
-    if content_type == 'tweet':
         prompt = f"{instruction}\nPress Release:\n{article}\n\n{suffix}:\n"
-    else:
-        prompt = f"{instruction}\nTitle: {title}\nPress Release:\n{article}\n\n{suffix}:\n"
+        category = media.lower()
+        height = 200
 
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
-            generate(prompt, category=content_type)
+            generate(prompt, category=category, model=model)
 
-        st.write(st.session_state['completion'])
+        text = st.session_state['completion']
+        st.text_area(label=f'Generated {content_type}', value=text, height=height)
+        st.write(f"Number of words: {len(text.split())}")
