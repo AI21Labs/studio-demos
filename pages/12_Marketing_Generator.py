@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
+import re
 
 st.set_page_config(
     page_title="Marketing Generator",
@@ -14,8 +15,8 @@ MODEL_CONF = {
 }
 
 LENGTH_LIMITS = {
-    "pitch": (50, 150),
-    "instagram post": (5, 50),
+    "pitch": (20, 150),
+    "instagram post": (5, 100),
     "tweet": (5, 100),
     "linkedin post": (20, 200),
 }
@@ -46,20 +47,26 @@ For more information on how PetSmart Charities is working to expand access to ve
 About PetSmart Charities®
 PetSmart Charities is committed to making the world a better place for pets and all who love them. Through its in-store adoption program in all PetSmart® stores across the U.S. and Puerto Rico, PetSmart Charities helps up to 600,000 pets connect with loving families each year. PetSmart Charities also provides grant funding to support organizations that advocate and care for the well-being of all pets and their families. PetSmart Charities' grants and efforts connect pets with loving homes through adoption, improve access to affordable veterinary care and support families in times of crises with access to food, shelter and disaster response. Each year, millions of generous supporters help pets in need by donating to PetSmart Charities directly at PetSmartCharities.org, while shopping at PetSmart.com, and by using the PIN pads at checkout registers inside PetSmart® stores. In turn, PetSmart Charities efficiently uses more than 90 cents of every dollar donated to fulfill its role as the leading funder of animal welfare in North America, granting more than $500 million since its inception in 1994. Independent from PetSmart LLC, PetSmart Charities is a 501(c)(3) organization that has received the Four-Star Rating from Charity Navigator for the past 18 years in a row – placing it among the top one percent of rated charities. To learn more visit www.petsmartcharities.org."""
 
-def generate(text, category, model_type="experimental/j1-compose", max_retries=10):
+
+def annonymize(text):
+    text = re.sub(r'https?:\/\/.*', '[URL]', text)
+    return re.sub(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', '[EMAIL]', text)
+
+
+def generate(text, category, model_type="experimental/j1-compose", max_retries=5):
     min_length, max_length = LENGTH_LIMITS[category]
     completions_filtered = []
     try_count = 0
+    MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = min_length, max_length
     while not len(completions_filtered) and try_count < max_retries:
         res = complete(model_type=model_type,
                    prompt=text,
                    config=MODEL_CONF,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
-        completion_texts = [comp['data']['text'] for comp in res['completions'] if comp["finishReason"]["reason"] == "endoftext"]
-        completions_filtered = [t for t in completion_texts if min_length <= len(t.split()) <= max_length and not any(i in t for i in ['http', '@', '/'])]
+        completions_filtered = [comp['data']['text'] for comp in res['completions'] if comp["finishReason"]["reason"] == "endoftext"]
         try_count += 1
     st.session_state["prompt"] = text
-    st.session_state["completion"] = completions_filtered[0]
+    st.session_state["completion"] = annonymize(completions_filtered[0])
 
 
 if __name__ == '__main__':
@@ -83,7 +90,10 @@ if __name__ == '__main__':
         instruction = f"Write a {content_type} touting the following press release."
         suffix = content_type
 
-    prompt = f"{instruction}\nTitle: {title}\nPress Release:\n{article}\n\n{suffix}:\n"
+    if content_type == 'tweet':
+        prompt = f"{instruction}\nPress Release:\n{article}\n\n{suffix}:\n"
+    else:
+        prompt = f"{instruction}\nTitle: {title}\nPress Release:\n{article}\n\n{suffix}:\n"
 
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
