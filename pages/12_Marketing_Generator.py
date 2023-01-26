@@ -58,7 +58,7 @@ About PetSmart Charities®
 PetSmart Charities is committed to making the world a better place for pets and all who love them. Through its in-store adoption program in all PetSmart® stores across the U.S. and Puerto Rico, PetSmart Charities helps up to 600,000 pets connect with loving families each year. PetSmart Charities also provides grant funding to support organizations that advocate and care for the well-being of all pets and their families. PetSmart Charities' grants and efforts connect pets with loving homes through adoption, improve access to affordable veterinary care and support families in times of crises with access to food, shelter and disaster response. Each year, millions of generous supporters help pets in need by donating to PetSmart Charities directly at PetSmartCharities.org, while shopping at PetSmart.com, and by using the PIN pads at checkout registers inside PetSmart® stores. In turn, PetSmart Charities efficiently uses more than 90 cents of every dollar donated to fulfill its role as the leading funder of animal welfare in North America, granting more than $500 million since its inception in 1994. Independent from PetSmart LLC, PetSmart Charities is a 501(c)(3) organization that has received the Four-Star Rating from Charity Navigator for the past 18 years in a row – placing it among the top one percent of rated charities. To learn more visit www.petsmartcharities.org."""
 
 
-def annonymize(text):
+def anonymize(text):
     text = re.sub(r'https?:\/\/.*', '[URL]', text)
     return re.sub(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', '[EMAIL]', text)
 
@@ -70,7 +70,7 @@ def query(model, prompt):
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
 
 
-def generate(text, category, model, max_retries=5):
+def generate(prompt, category, model, max_retries=5):
     min_length, max_length = WORDS_LIMIT[category]
     completions_filtered = []
     try_count = 0
@@ -81,8 +81,27 @@ def generate(text, category, model, max_retries=5):
                                 if comp["finishReason"]["reason"] == "endoftext"
                                 and min_length <= len(comp['data']['text'].split()) <= max_length]
         try_count += 1
-    st.session_state["prompt"] = text
-    st.session_state["completion"] = annonymize(completions_filtered[0])
+    st.session_state["completions"] = [anonymize(i) for i in completions_filtered]
+
+
+def on_next():
+    st.session_state['index'] = (st.session_state['index'] + 1) % len(st.session_state['completions'])
+
+
+def on_prev():
+    st.session_state['index'] = (st.session_state['index'] - 1) % len(st.session_state['completions'])
+
+
+def toolbar():
+    cols = st.columns([0.2, 0.2, 0.2, 0.2, 0.2])
+    with cols[1]:
+        if st.button(label='<', key='prev'):
+            on_prev()
+    with cols[2]:
+        st.text(f"{st.session_state['index'] + 1}/{len(st.session_state['completions'])}")
+    with cols[3]:
+        if st.button(label='>', key='next'):
+            on_next()
 
 
 if __name__ == '__main__':
@@ -137,6 +156,15 @@ if __name__ == '__main__':
         with st.spinner("Loading..."):
             generate(prompt, category=category, model=model)
 
-        text = st.session_state['completion']
-        st.text_area(label=f'Generated {content_type}', value=text, height=height)
-        st.write(f"Number of words: {len(text.split())}")
+    if 'completions' in st.session_state:
+        if len(st.session_state['completions']) == 0:
+            st.write("Please try again 😔")
+
+        else:
+            if 'index' not in st.session_state:
+                st.session_state['index'] = 0
+
+            curr_text = st.session_state['completions'][st.session_state['index']]
+            st.text_area(label=f'Generated {content_type}', value=curr_text.strip(), height=height)
+            st.write(f"Number of words: {len(curr_text.split())}")
+            toolbar()
