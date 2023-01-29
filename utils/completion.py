@@ -16,6 +16,7 @@ def _full_url(env, model_type, custom_model, endpoint):
 
 async def async_complete(model_type, prompt, config, api_key, custom_model=None, env='production', delay=0):
     async with ClientSession() as session:
+        await asyncio.sleep(delay)
         url = _full_url(env, model_type, custom_model, endpoint='complete')
         auth_header = f"Bearer {api_key}"
         res = await session.post(
@@ -39,6 +40,17 @@ async def async_tokenize(text, api_key, env='production', delay=0):
         )
         res = await res.json()
         return res
+
+
+def tokenize(text, api_key, env='production'):
+    url = _full_url(env, '', '', endpoint='tokenize')
+    auth_header = f"Bearer {api_key}"
+    res = requests.post(
+        url,
+        headers={"Authorization": auth_header},
+        json={"text": text}
+    )
+    return [i['token'] for i in res.json()['tokens']]
 
 
 def complete(model_type, prompt, config, api_key, custom_model=None, env='production'):
