@@ -2,7 +2,6 @@ import streamlit as st
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
 import re
-import requests
 
 st.set_page_config(
     page_title="Marketing Generator",
@@ -16,19 +15,11 @@ MODEL_CONF = {
 }
 
 TOKENS_LIMITS = {
-    "byline": (100, 500),
     "pitch": (20, 150),
-    "instagram": (5, 100),
-    "twitter": (5, 100),
-    "linkedin": (20, 200),
 }
 
 WORDS_LIMIT = {
-    "byline": (500, 700),
     "pitch": (150, 200),
-    "instagram": (5, 100),
-    "twitter": (5, 100),
-    "linkedin": (20, 200),
 }
 
 title_placeholder = "PetSmart Charities® Commits $100 Million to Improve Access to Veterinary Care"
@@ -63,20 +54,20 @@ def anonymize(text):
     return re.sub(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', '[EMAIL]', text)
 
 
-def query(model, prompt):
+def query(prompt):
     return complete(model_type="experimental/j1-compose",
                    prompt=prompt,
                    config=MODEL_CONF,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
 
 
-def generate(prompt, category, model, max_retries=5):
+def generate(prompt, category, max_retries=2):
     min_length, max_length = WORDS_LIMIT[category]
     completions_filtered = []
     try_count = 0
     MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = TOKENS_LIMITS[category]
     while not len(completions_filtered) and try_count < max_retries:
-        res = query(model, prompt)
+        res = query(prompt)
         completions_filtered = [comp['data']['text'] for comp in res['completions']
                                 if comp["finishReason"]["reason"] == "endoftext"
                                 and min_length <= len(comp['data']['text'].split()) <= max_length]
@@ -105,56 +96,28 @@ def toolbar():
 
 
 if __name__ == '__main__':
-
-    model = 'instruct'
     apply_studio_style()
     st.title("Marketing Generator")
 
-    content_type = st.radio(
-        "Select content type 👉",
-        key="content_type",
-        options=['Byline', 'Pitch Email', 'Social Media Post'],
-    )
-    if content_type == 'Pitch Email':
-        domain = st.radio(
-        "Select domain 👉",
+    st.session_state['title'] = st.text_input(label="Title", value=title_placeholder).strip()
+    st.session_state['article'] = st.text_area(label="Article", value=article_placeholder, height=500).strip()
+
+    domain = st.radio(
+        "Select domain of reporter 👉",
         options=['Technology', 'Healthcare', 'Venture Funding', 'Other'],
     )
-    elif content_type == 'Social Media Post':
-        media = st.radio(
-            "Select social media 👉",
-            options=['Instagram', 'Twitter', 'Linkedin'],
-        )
 
-    title = st.text_input(label="Title", value=title_placeholder).strip()
-    article = st.text_area(label="Article", value=article_placeholder, height=500).strip()
-
-    if content_type == 'Pitch Email':
-        model = 'compose'
-        if domain == 'other':
-            instruction = "Write a pitch to reporters persuading them why they should write about this for their publication."
-        else:
-            instruction = f"Write a pitch to reporters that cover {domain} stories persuading them why they should write about this for their publication."
-        suffix = "Email Introduction"
-        prompt = f"{instruction}\nTitle: {title}\nPress Release:\n{article}\n\n{suffix}:\n"
-        category = 'pitch'
-        height = 400
-    elif content_type == 'Byline':
-        instruction = f'Write an article titled "{title}" and is based on the following press release.'
-        suffix = "Article"
-        prompt = f"{instruction}\nPress Release:\n{article}\n\n{suffix}:\n"
-        category = 'byline'
-        height = 600
+    if domain == 'Other':
+        instruction = "Write a pitch to reporters persuading them why they should write about this for their publication."
     else:
-        instruction = f"Write a {content_type} touting the following press release."
-        suffix = content_type
-        prompt = f"{instruction}\nPress Release:\n{article}\n\n{suffix}:\n"
-        category = media.lower()
-        height = 200
+        instruction = f"Write a pitch to reporters that cover {domain} stories persuading them why they should write about this for their publication."
+    suffix = "Email Introduction"
+    prompt = f"{instruction}\nTitle: {st.session_state['title']}\nPress Release:\n{st.session_state['article']}\n\n{suffix}:\n"
+    category = 'pitch'
 
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
-            generate(prompt, category=category, model=model)
+            generate(prompt, category=category)
             st.session_state['index'] = 0
 
     if 'completions' in st.session_state:
@@ -163,7 +126,8 @@ if __name__ == '__main__':
 
         else:
             curr_text = st.session_state['completions'][st.session_state['index']]
-            st.text_area(label=f'Generated {content_type}', value=curr_text.strip(), height=height)
+            st.subheader(f'Generated Email')
+            st.text_area(label="", value=curr_text.strip(), height=400)
             st.write(f"Number of words: {len(curr_text.split())}")
             if len(st.session_state['completions']) > 1:
                 toolbar()
