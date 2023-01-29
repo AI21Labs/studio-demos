@@ -60,7 +60,7 @@ def anonymize(text):
 
 
 def query(prompt):
-    return complete(model_type="experimental/j1-compose",
+    return complete(model_type="experimental/j1-grande-instruct",
                    prompt=prompt,
                    config=MODEL_CONF,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
