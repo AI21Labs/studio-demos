@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.completion import complete
+from utils.completion import complete, tokenize
 from utils.studio_style import apply_studio_style
 from constants import OBQA_CONTEXT, OBQA_QUESTION, OBQA_MODEL
 
@@ -8,6 +8,7 @@ st.set_page_config(
     page_title="OpenBookQA",
 )
 
+max_tokens = 2048 - 200
 
 def query(prompt, **kwargs):
     config = {
@@ -37,7 +38,13 @@ if __name__ == '__main__':
 
     if st.button(label="Answer"):
         with st.spinner("Loading..."):
-            st.session_state["obqa_answer"] = query(obqa_prompt)
+            num_tokens = len(tokenize(obqa_prompt, api_key=st.secrets['api-keys']['ai21-algo-team-prod']))
+            if num_tokens > max_tokens:
+                st.write("Text is too long. Input is limited up to 2048 tokens. Try using a shorter text.")
+                if 'obqa_answer' in st.session_state:
+                    del st.session_state['completions']
+            else:
+                st.session_state["obqa_answer"] = query(obqa_prompt)
 
     if "obqa_answer" in st.session_state:
         st.write(f"Answer: {st.session_state['obqa_answer']}")

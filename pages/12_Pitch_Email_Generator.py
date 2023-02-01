@@ -1,11 +1,13 @@
 import streamlit as st
-from utils.completion import complete
+from utils.completion import complete, tokenize
 from utils.studio_style import apply_studio_style
 import re
 
 st.set_page_config(
     page_title="Marketing Generator",
 )
+
+max_tokens = 2048 - 200
 
 MODEL_CONF = {
     "maxTokens": 200,
@@ -117,8 +119,14 @@ if __name__ == '__main__':
 
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
-            generate(prompt, category=category)
-            st.session_state['index'] = 0
+            num_tokens = len(tokenize(prompt, api_key=st.secrets['api-keys']['ai21-algo-team-prod']))
+            if num_tokens > max_tokens:
+                st.write("Text is too long. Input is limited up to 2048 tokens. Try using a shorter text.")
+                if 'completions' in st.session_state:
+                    del st.session_state['completions']
+            else:
+                generate(prompt, category=category)
+                st.session_state['index'] = 0
 
     if 'completions' in st.session_state:
         if len(st.session_state['completions']) == 0:
