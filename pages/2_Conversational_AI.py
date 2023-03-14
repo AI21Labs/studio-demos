@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_chat import message
 from typing import List, Dict
-from constants import CUSTOM_CHAT_DEMOS
+from constants import CUSTOM_CHAT_DEMOS, DEFAULT_INSTRUCT_MODEL
 
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     apply_studio_style()
     custom_demo = "fortune_teller"
     init_demo(custom_demo)
-    st.session_state['fortune_teller_model'] = 'experimental/j1-grande-instruct'
+    st.session_state['fortune_teller_model'] = DEFAULT_INSTRUCT_MODEL
     st.session_state['bot_name'] = st.session_state['custom_participants'][0]
     st.session_state['user_name'] = st.session_state['custom_participants'][1]
     st.session_state['fewshot'] = st.session_state['custom_examples']

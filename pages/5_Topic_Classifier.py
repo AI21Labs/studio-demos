@@ -1,8 +1,8 @@
 import streamlit as st
-
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
-from constants import CLASSIFICATION_FEWSHOT, CLASSIFICATION_PROMPT, CLASSIFICATION_TITLE, CLASSIFICATION_DESCRIPTION
+from constants import CLASSIFICATION_FEWSHOT, CLASSIFICATION_PROMPT, CLASSIFICATION_TITLE, CLASSIFICATION_DESCRIPTION, \
+    DEFAULT_VANILLA_MODEL
 
 st.set_page_config(
     page_title="Topic Classifier",
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     apply_studio_style()
     st.title("The Topic Classifier")
     st.write("Read any interesting news lately? Let's see if our topic classifier can skim through it and identify whether its category is sports, business, world news, or science and technology.")
-    st.session_state['classification_model'] = 'j1-jumbo'
+    st.session_state['classification_model'] = DEFAULT_VANILLA_MODEL
 
     st.text(CLASSIFICATION_PROMPT)
     classification_title = st.text_input(label="Title:", value=CLASSIFICATION_TITLE)

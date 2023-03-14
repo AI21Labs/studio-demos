@@ -1,11 +1,11 @@
 import streamlit as st
 import numpy as np
 import asyncio
-from aiohttp import ClientSession
+from constants import DEFAULT_VANILLA_MODEL
 from utils.studio_style import apply_studio_style
-
 import argparse
 from utils.completion import complete, async_complete
+from utils.task_specific_apis import paraphrase_req
 
 st.set_page_config(
     page_title="Blog Post Generator",
@@ -45,7 +45,7 @@ def generate_sections_content(num_results, sections, title):
         "topP": 1,
         "stopSequences": []
     }
-    group = asyncio.gather(*[async_complete('j1-grande', build_prompt(title, sections, s), config, api_key=st.secrets['api-keys']['ai21-algo-team-prod'], custom_model="long-form-70-0005-40-epochs") for s in sections])
+    group = asyncio.gather(*[async_complete(DEFAULT_VANILLA_MODEL, build_prompt(title, sections, s), config, api_key=st.secrets['api-keys']['ai21-algo-team-prod'], custom_model="long-form-70-0005-40-epochs") for s in sections])
     results = loop.run_until_complete(group)
     loop.close()
     return results
@@ -73,7 +73,7 @@ def _generate_outline(title):
         "topP": 1,
         "stopSequences": ["##"]
     }
-    res = complete(model_type='j1-jumbo',
+    res = complete(model_type=DEFAULT_VANILLA_MODEL,
                    prompt=prompt,
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
@@ -163,21 +163,6 @@ def build_event_loop_one_section(title, section, num_results):
 def on_outline_change():
     st.session_state['show_sections'] = False
 
-
-async def paraphrase_req(sentence, tone):
-    async with ClientSession() as session:
-        res = await session.post(
-            "https://api.ai21.com/studio/v1/experimental/rewrite",
-            headers={f"Authorization": f"Bearer {st.secrets['api-keys']['ai21-algo-team-prod']}"},
-            json={
-                "text": sentence,
-                "intent": tone.lower(),
-                "spanStart": 0,
-                "spanEnd": len(sentence)
-            }
-        )
-        res = await res.json()
-        return res
 
 def paraphrase(text, tone, times):
     len_text = len(text)

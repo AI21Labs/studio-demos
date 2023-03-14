@@ -2,7 +2,7 @@ import streamlit as st
 
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
-from constants import CODE_GENERATIONS_EXAMPLES, CODE_GENERATION_CUSTOM_PROMPT_PLACEHOLDER
+from constants import CODE_GENERATIONS_EXAMPLES, CODE_GENERATION_CUSTOM_PROMPT_PLACEHOLDER, DEFAULT_VANILLA_MODEL
 
 preset = """Create a regular expression that extracts email addresses from strings:\nExpression: /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi\n\n##\n\nCreate a regular expression that validate a password contains at least 8 characters, one uppercase letter and a number:\nExpression: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/g\n\n##\n\nCreate a regular expression that finds non-ASCII characters:\nExpression: [^\x00-\x7F]\n\n##\n\nCreate a regular expression to match HTML tags:\nExpression: /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/\n\n##\n\nCreate a regular expression to validate an IP address:\nExpression: ^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$\n\n##\n\n"""
 suffix = ":\nExpression:"
@@ -22,7 +22,7 @@ def query(prompt):
         "topP": 1,
         "stopSequences": ["##"]
     }
-    res = complete(model_type='j1-jumbo',
+    res = complete(model_type=DEFAULT_VANILLA_MODEL,
                    prompt=f"{preset}{prompt}{suffix}",
                    config=config,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])

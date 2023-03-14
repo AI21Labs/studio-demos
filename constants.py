@@ -1,3 +1,6 @@
+DEFAULT_VANILLA_MODEL = 'j2-jumbo'
+DEFAULT_INSTRUCT_MODEL = 'j2-jumbo-instruct'
+
 SHOE_LA_LA_PARTICIPANTS = ['Mary', 'User']
 SHOE_LA_LA_GREETING = f"Hi, I’m {SHOE_LA_LA_PARTICIPANTS[0]}, Shoe-La-La’s online customer representative. How may I help you today?"
 SHOE_LA_LA_BACKGROUND = """Mary is a customer service representative with Shoe-La-La, an online shoe store. She is friendly and eager to help.

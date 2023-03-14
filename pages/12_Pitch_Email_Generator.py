@@ -1,4 +1,6 @@
 import streamlit as st
+
+from constants import DEFAULT_INSTRUCT_MODEL
 from utils.completion import complete, tokenize
 from utils.studio_style import apply_studio_style
 import re
@@ -57,7 +59,7 @@ def anonymize(text):
 
 
 def query(prompt):
-    return complete(model_type="experimental/j1-compose",
+    return complete(model_type=DEFAULT_INSTRUCT_MODEL,
                    prompt=prompt,
                    config=MODEL_CONF,
                    api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
