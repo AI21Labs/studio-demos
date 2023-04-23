@@ -6,7 +6,7 @@ API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
 
 
 def obqa(context, question):
-    endpoint = "https://api.ai21.com/studio/v1/experimental/open-book-qa"
+    endpoint = "https://api.ai21.com/studio/v1/experimental/answer"
     auth_header = "Bearer " + API_KEY
     res = requests.post(endpoint,
                         headers={"Authorization": auth_header},
