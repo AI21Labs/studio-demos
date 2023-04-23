@@ -45,7 +45,7 @@ def generate_sections_content(num_results, sections, title):
         "topP": 1,
         "stopSequences": []
     }
-    group = asyncio.gather(*[async_complete(DEFAULT_VANILLA_MODEL, build_prompt(title, sections, s), config, api_key=st.secrets['api-keys']['ai21-algo-team-prod'], custom_model="long-form-70-0005-40-epochs") for s in sections])
+    group = asyncio.gather(*[async_complete('j1-grande', build_prompt(title, sections, s), config, api_key=st.secrets['api-keys']['ai21-algo-team-prod'], custom_model="long-form-70-0005-40-epochs") for s in sections])
     results = loop.run_until_complete(group)
     loop.close()
     return results
