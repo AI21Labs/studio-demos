@@ -1,33 +1,14 @@
-import requests
 import streamlit as st
-
-from utils.completion import _full_url
 from utils.studio_style import apply_studio_style
-
-
-API_KEY = st.secrets['api-keys']['ai21-algo-team-prod']
+from constants import ai21
 
 st.set_page_config(
     page_title="Rewrite Tool",
 )
 
-@st.cache(show_spinner=False)
-def rewrite(text, api_key, intent="general", span_start=0, span_end=None, env="production"):
-    url = _full_url(env, model_type='experimental', custom_model='', endpoint='rewrite')
-    auth_header = f"Bearer {api_key}"
-    resp = requests.post(
-        url,
-        headers={"Authorization": auth_header},
-        json={"text": text,
-              "intent": intent,
-              "spanStart": span_start,
-              "spanEnd": len(text) if span_end is None else span_end}
-    )
-    return resp.json()
-
 
 def get_suggestions(text, intent='general', span_start=0, span_end=None):
-    rewrite_resp = rewrite(text, intent=intent, span_start=span_start, span_end=span_end, api_key=API_KEY)
+    rewrite_resp = ai21.Paraphrase.execute(text=text, intent=intent, spanStart=span_start, spanEnd=span_end or len(text))
     rewritten_texts = [sug['text'] for sug in rewrite_resp['suggestions']]
     st.session_state["rewrite_rewritten_texts"] = rewritten_texts
 

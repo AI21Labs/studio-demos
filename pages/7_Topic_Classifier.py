@@ -18,8 +18,7 @@ def query(prompt):
     }
     res = complete(model_type=st.session_state['classification_model'],
                    prompt=prompt,
-                   config=config,
-                   api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
+                   config=config)
     return res["completions"][0]["data"]["text"]
 
 

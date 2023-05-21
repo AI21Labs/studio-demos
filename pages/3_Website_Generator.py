@@ -28,8 +28,7 @@ def query(prompt, stopSequences=["##"]):
 
     res = complete(model_type=DEFAULT_INSTRUCT_MODEL,
                    prompt=prompt,
-                   config=config,
-                   api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
+                   config=config)
 
     return res["completions"][0]["data"]["text"]
 

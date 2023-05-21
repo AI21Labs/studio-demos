@@ -44,8 +44,7 @@ def query(prompt):
 
     res = complete(model_type=DEFAULT_VANILLA_MODEL,
                    prompt=prompt,
-                   config=config,
-                   api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
+                   config=config)
 
     return res["completions"][0]["data"]["text"]
 

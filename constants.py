@@ -1,5 +1,16 @@
+import ai21
+import streamlit as st
+
+ai21.api_key = st.secrets['api-keys']['ai21-algo-team-prod']
+
 DEFAULT_VANILLA_MODEL = 'j2-jumbo'
 DEFAULT_INSTRUCT_MODEL = 'j2-jumbo-instruct'
+
+SUMMARIZATION_URL = "https://www.ai21.com/blog/announcing-ai21-studio-and-jurassic-1"
+SUMMARIZATION_TEXT = '''Perhaps no other crisis in modern history has had as great an impact on daily human existence as COVID-19. And none has forced businesses throughout the world to accelerate their evolution as their leaders worked to respond and recover on the way to thriving in the postpandemic environment.
+
+Deloitte Private’s latest global survey of private enterprises reveals that executives in every region used the crisis as a catalyst, accelerating change in virtually all aspects of how we work and live. They stepped up their digital transformation through greater technology investment and deployment. In-progress initiatives were pushed toward completion, while those that were on the drawing board came to life. They sought out new partnerships and alliances. They pursued new opportunities to strengthen their supply networks and grow markets. They increased efforts to understand their purpose beyond profits, seeking new ways to grow sustainably and strengthen trust with their employees, customers, and other key stakeholders. They also embraced new possibilities in how and where work gets done.
+'''
 
 SHOE_LA_LA_PARTICIPANTS = ['Mary', 'User']
 SHOE_LA_LA_GREETING = f"Hi, I’m {SHOE_LA_LA_PARTICIPANTS[0]}, Shoe-La-La’s online customer representative. How may I help you today?"
@@ -441,4 +452,3 @@ In this approach we break our text into sentences. This will capture meaningful 
 Each method has pros and cons, and like any real-life problem, the best solution involves a number of compromises. AI21 Studio uses a large token dictionary (250K), which contains some from every method: separate characters, words, word parts such as prefixes and suffixes, and many multi-word tokens."""
 
 OBQA_QUESTION = "Which tokenization methods are there?"
-OBQA_MODEL = "OpenBookQA_v3.3"

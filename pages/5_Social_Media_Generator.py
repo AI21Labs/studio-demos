@@ -4,6 +4,7 @@ from constants import DEFAULT_INSTRUCT_MODEL
 from utils.completion import complete, tokenize
 from utils.studio_style import apply_studio_style
 import re
+import requests
 
 st.set_page_config(
     page_title="Marketing Generator",
@@ -19,11 +20,15 @@ MODEL_CONF = {
 }
 
 TOKENS_LIMITS = {
-    "pitch": (20, 150),
+    "instagram": (5, 100),
+    "twitter": (5, 100),
+    "linkedin": (20, 200),
 }
 
 WORDS_LIMIT = {
-    "pitch": (150, 200),
+    "instagram": (5, 100),
+    "twitter": (5, 100),
+    "linkedin": (20, 200),
 }
 
 title_placeholder = "PetSmart Charities® Commits $100 Million to Improve Access to Veterinary Care"
@@ -61,8 +66,7 @@ def anonymize(text):
 def query(prompt):
     return complete(model_type=DEFAULT_INSTRUCT_MODEL,
                    prompt=prompt,
-                   config=MODEL_CONF,
-                   api_key=st.secrets['api-keys']['ai21-algo-team-prod'])
+                   config=MODEL_CONF)
 
 
 def generate(prompt, category, max_retries=2):
@@ -101,33 +105,28 @@ def toolbar():
 
 if __name__ == '__main__':
     apply_studio_style()
-    st.title("Marketing Generator")
+    st.title("Social Media Generator")
 
     st.session_state['title'] = st.text_input(label="Title", value=title_placeholder).strip()
     st.session_state['article'] = st.text_area(label="Article", value=article_placeholder, height=500).strip()
 
-    domain = st.radio(
-        "Select domain of reporter 👉",
-        options=['Technology', 'Healthcare', 'Venture Funding', 'Other'],
+    media = st.radio(
+        "Select social media 👉",
+        options=['Instagram', 'Twitter', 'Linkedin'],
     )
 
-    if domain == 'Other':
-        instruction = "Write a pitch to reporters persuading them why they should write about this for their publication."
-    else:
-        instruction = f"Write a pitch to reporters that cover {domain} stories persuading them why they should write about this for their publication."
-    suffix = "Email Introduction"
-    prompt = f"{instruction}\nTitle: {st.session_state['title']}\nPress Release:\n{st.session_state['article']}\n\n{suffix}:\n"
-    category = 'pitch'
+    instruction = f"Write a {media} post touting the following press release."
+    prompt = f"{instruction}\nPress Release:\n{st.session_state['article']}\n\nPost:\n"
 
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
-            num_tokens = len(tokenize(prompt, api_key=st.secrets['api-keys']['ai21-algo-team-prod']))
+            num_tokens = len(tokenize(prompt))
             if num_tokens > max_tokens:
                 st.write("Text is too long. Input is limited up to 2048 tokens. Try using a shorter text.")
                 if 'completions' in st.session_state:
                     del st.session_state['completions']
             else:
-                generate(prompt, category=category)
+                generate(prompt, category=media.lower())
                 st.session_state['index'] = 0
 
     if 'completions' in st.session_state:
@@ -136,8 +135,8 @@ if __name__ == '__main__':
 
         else:
             curr_text = st.session_state['completions'][st.session_state['index']]
-            st.subheader(f'Generated Email')
-            st.text_area(label="", value=curr_text.strip(), height=400)
+            st.subheader(f'Generated {media} Post')
+            st.text_area(label="", value=curr_text.strip(), height=200)
             st.write(f"Number of words: {len(curr_text.split())}")
             if len(st.session_state['completions']) > 1:
                 toolbar()

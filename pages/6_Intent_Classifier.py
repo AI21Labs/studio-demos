@@ -17,8 +17,7 @@ def generate_response(prompt, delay):
     config = {"maxTokens": 0, "temperature": 1}
     res = async_complete(model_type=DEFAULT_INSTRUCT_MODEL,
              prompt=prompt,
-             config=config,
-             api_key=st.secrets['api-keys']['ai21-algo-team-prod'], delay=delay)
+             config=config, delay=delay)
     return res
 
 
@@ -44,7 +43,7 @@ if __name__ == "__main__":
 
     if st.button('Classify'):
         prompt = f"{instruction}\n{st.session_state['classes']}\n\nQuestion:\n{st.session_state['question']}\n\nClass:\n"
-        num_tokens = len(tokenize(prompt, api_key=st.secrets['api-keys']['ai21-algo-team-prod']))
+        num_tokens = len(tokenize(prompt))
         responses = batch_responses([prompt + c for c in st.session_state['classes'].split('\n')])
         results = {}
         for i, r in enumerate(responses):
