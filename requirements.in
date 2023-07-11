@@ -3,3 +3,5 @@ streamlit
 streamlit-chat
 aiohttp
 ai21
+requests>=2.31.0
+tornado>=6.3.2
