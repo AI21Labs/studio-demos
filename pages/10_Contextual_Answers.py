@@ -1,8 +1,7 @@
 import streamlit as st
 from utils.completion import tokenize
 from utils.studio_style import apply_studio_style
-from constants import OBQA_CONTEXT, OBQA_QUESTION
-from utils.task_specific_apis import answer
+from constants import OBQA_CONTEXT, OBQA_QUESTION, ai21
 
 st.set_page_config(
     page_title="Answers",
@@ -29,9 +28,8 @@ if __name__ == '__main__':
                 if 'answer' in st.session_state:
                     del st.session_state['completions']
             else:
-                response = answer(context=context, question=question)
-                st.session_state["answer"] = response
-
+                response = ai21.Experimental.answer(context=context, question=question)
+                st.session_state["answer"] = response['answer']
 
     if "answer" in st.session_state:
         st.write(st.session_state['answer'])
