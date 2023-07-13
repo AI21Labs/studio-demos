@@ -1,1 +1,1 @@
-# studio-launchpad-long-form
+# AI21 Studio Demos
