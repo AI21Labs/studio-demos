@@ -1,5 +1,5 @@
 import streamlit as st
-from constants import WEBSITE_DESCRIPTION_FEW_SHOT, WEBSITE_HEADLINE_FEW_SHOT, DEFAULT_INSTRUCT_MODEL
+from constants import WEBSITE_DESCRIPTION_FEW_SHOT, WEBSITE_HEADLINE_FEW_SHOT, DEFAULT_MODEL
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
 
@@ -26,7 +26,7 @@ def query(prompt, stopSequences=["##"]):
       "stopSequences":stopSequences
     }
 
-    res = complete(model_type=DEFAULT_INSTRUCT_MODEL,
+    res = complete(model_type=DEFAULT_MODEL,
                    prompt=prompt,
                    config=config)
 

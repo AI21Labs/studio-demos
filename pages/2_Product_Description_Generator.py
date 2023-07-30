@@ -1,5 +1,5 @@
 import streamlit as st
-from constants import PRODUCT_DESCRIPTION_FEW_SHOT, DEFAULT_VANILLA_MODEL
+from constants import PRODUCT_DESCRIPTION_FEW_SHOT, DEFAULT_MODEL
 from utils.completion import complete
 from utils.studio_style import apply_studio_style
 
@@ -42,7 +42,7 @@ def query(prompt):
       "stopSequences":["##"]
     }
 
-    res = complete(model_type=DEFAULT_VANILLA_MODEL,
+    res = complete(model_type=DEFAULT_MODEL,
                    prompt=prompt,
                    config=config)
 

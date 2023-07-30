@@ -3,8 +3,7 @@ import streamlit as st
 
 ai21.api_key = st.secrets['api-keys']['ai21-algo-team-prod']
 
-DEFAULT_VANILLA_MODEL = 'j2-jumbo'
-DEFAULT_INSTRUCT_MODEL = 'j2-jumbo-instruct'
+DEFAULT_MODEL = 'j2-ultra'
 
 SUMMARIZATION_URL = "https://www.ai21.com/blog/announcing-ai21-studio-and-jurassic-1"
 SUMMARIZATION_TEXT = '''Perhaps no other crisis in modern history has had as great an impact on daily human existence as COVID-19. And none has forced businesses throughout the world to accelerate their evolution as their leaders worked to respond and recover on the way to thriving in the postpandemic environment.

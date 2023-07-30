@@ -1,7 +1,7 @@
 import asyncio
 import math
 import streamlit as st
-from constants import DEFAULT_INSTRUCT_MODEL
+from constants import DEFAULT_MODEL
 from utils.completion import async_complete, tokenize
 import re
 
@@ -15,9 +15,9 @@ st.set_page_config(
 
 def generate_response(prompt, delay):
     config = {"maxTokens": 0, "temperature": 1}
-    res = async_complete(model_type=DEFAULT_INSTRUCT_MODEL,
-             prompt=prompt,
-             config=config, delay=delay)
+    res = async_complete(model_type=DEFAULT_MODEL,
+                         prompt=prompt,
+                         config=config, delay=delay)
     return res
 
 

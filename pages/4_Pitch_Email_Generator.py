@@ -1,6 +1,5 @@
 import streamlit as st
-
-from constants import DEFAULT_INSTRUCT_MODEL
+from constants import DEFAULT_MODEL
 from utils.completion import complete, tokenize
 from utils.studio_style import apply_studio_style
 import re
@@ -58,19 +57,13 @@ def anonymize(text):
     return re.sub(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', '[EMAIL]', text)
 
 
-def query(prompt):
-    return complete(model_type=DEFAULT_INSTRUCT_MODEL,
-                   prompt=prompt,
-                   config=MODEL_CONF)
-
-
 def generate(prompt, category, max_retries=2):
     min_length, max_length = WORDS_LIMIT[category]
     completions_filtered = []
     try_count = 0
     MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = TOKENS_LIMITS[category]
     while not len(completions_filtered) and try_count < max_retries:
-        res = query(prompt)
+        res = complete(model_type=DEFAULT_MODEL, prompt=prompt, config=MODEL_CONF)
         completions_filtered = [comp['data']['text'] for comp in res['completions']
                                 if comp["finishReason"]["reason"] == "endoftext"
                                 and min_length <= len(comp['data']['text'].split()) <= max_length]
