@@ -18,7 +18,7 @@ def query(prompt):
     }
     res = complete(model_type=st.session_state['classification_model'],
                    prompt=prompt,
-                   config=config)
+                   **config)
     return res["completions"][0]["data"]["text"]
 
 

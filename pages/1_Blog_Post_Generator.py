@@ -75,7 +75,7 @@ def _generate_outline(title):
     }
     res = complete(model_type=DEFAULT_MODEL,
                    prompt=prompt,
-                   config=config)
+                   **config)
     return res
 
 

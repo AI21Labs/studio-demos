@@ -28,7 +28,7 @@ def query(prompt, stopSequences=["##"]):
 
     res = complete(model_type=DEFAULT_MODEL,
                    prompt=prompt,
-                   config=config)
+                   **config)
 
     return res["completions"][0]["data"]["text"]
 

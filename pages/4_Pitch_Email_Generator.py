@@ -63,7 +63,7 @@ def generate(prompt, category, max_retries=2):
     try_count = 0
     MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = TOKENS_LIMITS[category]
     while not len(completions_filtered) and try_count < max_retries:
-        res = complete(model_type=DEFAULT_MODEL, prompt=prompt, config=MODEL_CONF)
+        res = complete(model_type=DEFAULT_MODEL, prompt=prompt, **MODEL_CONF)
         completions_filtered = [comp['data']['text'] for comp in res['completions']
                                 if comp["finishReason"]["reason"] == "endoftext"
                                 and min_length <= len(comp['data']['text'].split()) <= max_length]

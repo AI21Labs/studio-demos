@@ -26,7 +26,7 @@ def tokenize(text):
     return [i['token'] for i in res['tokens']]
 
 
-def complete(model_type, prompt, config):
+def complete(model_type, prompt, **config):
     return ai21.Completion.execute(model=model_type, prompt=prompt, **config)
 
 
