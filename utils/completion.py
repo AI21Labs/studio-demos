@@ -28,3 +28,19 @@ def tokenize(text):
 
 def complete(model_type, prompt, config):
     return ai21.Completion.execute(model=model_type, prompt=prompt, **config)
+
+
+async def paraphrase_req(sentence, tone):
+    async with ClientSession() as session:
+        res = await session.post(
+            "https://api.ai21.com/studio/v1/paraphrase",
+            headers={f"Authorization": f"Bearer {st.secrets['api-keys']['ai21-algo-team-prod']}"},
+            json={
+                "text": sentence,
+                "intent": tone.lower(),
+                "spanStart": 0,
+                "spanEnd": len(sentence)
+            }
+        )
+        res = await res.json()
+        return res
