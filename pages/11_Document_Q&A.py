@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     if st.button(label = "Answer"):
         with st.spinner("Loading..."):
-            response = ai21.Library.Answer.execute(question=question, fileIds = files_ids)
+            response = ai21.Library.Answer.execute(question=question, fileIds = st.session_state['file_ids'])
             st.session_state["answer"] = response['answer']
             
     if "answer" in st.session_state:
