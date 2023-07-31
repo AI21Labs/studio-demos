@@ -1,6 +1,7 @@
 import streamlit as st
 import re
 import pdfplumber
+from ai21.errors import UnprocessableEntity
 from utils.studio_style import apply_studio_style
 from constants import DOC_QA, ai21
 
@@ -39,7 +40,7 @@ st.set_page_config(
 if __name__ == '__main__':
     apply_studio_style()
     st.title("Document Q&A")
-    st.write("Upload a document ")
+    st.markdown("**Upload a document**")
     uploaded_file = st.file_uploader("choose .pdf/.txt file ", type=["pdf", "text", "txt"])
     files_ids = []
 
@@ -61,24 +62,35 @@ if __name__ == '__main__':
                 files_paths    = write_to_library(segmented_text, uploaded_file.name)
 
                 for file_path in files_paths:
-                    files_ids.append(ai21.Library.Files.upload(file_path=file_path))
-                
-                st.session_state['file_ids']      = files_ids    
-                st.session_state['file_uploaded'] = True
+                    try:
+                        response = files_ids.append(ai21.Library.Files.upload(file_path=file_path))
+                    except UnprocessableEntity:
+                            st.write("This file already exists, please rename the file")
 
-    st.write("Ask a question on the uploaded document") 
+                st.session_state['files_ids']     = files_ids
+                st.session_state['file_uploaded'] = True
+    else:
+        st.write("Don't forget to remove your file before uploading a new one")
+
+    st.markdown("**Ask a question about the uploaded document**") 
     question = st.text_input(label = "Question:", value = DOC_QA)
 
     if st.button(label = "Answer"):
         with st.spinner("Loading..."):
-            response = ai21.Library.Answer.execute(question=question, fileIds = st.session_state['file_ids'])
-            st.session_state["answer"] = response['answer']
+            if 'files_ids' not in st.session_state:
+                st.write("Please upload a document")
+            else:
+                response = ai21.Library.Answer.execute(question = question, fileIds = st.session_state['files_ids'] )
+                st.session_state["answer"] = response['answer']
             
     if "answer" in st.session_state:
         st.write(st.session_state['answer'])
 
-    st.write("Please remove your files before leaving ")
-    if st.button("Remove files"):
+    st.write("Please remove your file before leaving ")
+    if st.button("Remove file"):
         with st.spinner("Loading..."):
-            for file_id in st.session_state['file_ids']:
-                ai21.Library.Files.delete(file_id)
+            if st.session_state['files_ids'] != None:
+                for file_id in st.session_state['files_ids']:
+                    ai21.Library.Files.delete(file_id)
+                st.session_state['file_uploaded'] = False
+                st.session_state['files_ids']     = None
