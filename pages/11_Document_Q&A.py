@@ -41,36 +41,51 @@ if __name__ == '__main__':
     apply_studio_style()
     st.title("Document Q&A")
     st.markdown("**Upload a document**")
-    uploaded_file = st.file_uploader("choose .pdf/.txt file ", type=["pdf", "text", "txt"])
-    files_ids = []
-
-    if uploaded_file and not st.session_state.get('file_uploaded',False):
-        file_type = uploaded_file.type
     
-        #TODO add support in TXT
-        if file_type == "text/plain":
-            plaintext = str(uploaded_file.read(), "utf-8")
-        else:
-            with st.spinner("File is being processed..."):
-                with pdfplumber.open(uploaded_file) as pdf:
-                    all_text = [p.extract_text() for p in pdf.pages]
-    
-                filtered = [i.strip() for i in all_text]
-                filtered = ['\n'.join([i.strip() for i in page.split('\n')[:-1]]).strip() for page in filtered]
-                filtered = [re.sub(' +', ' ', i) for i in filtered]
-                segmented_text = merge_segments(filtered, max_chars)
-                files_paths    = write_to_library(segmented_text, uploaded_file.name)
+    if 'file_uploaded' not in st.session_state:
+        uploaded_file = st.file_uploader("choose .pdf/.txt file ", type=["pdf", "text", "txt"])
+        if uploaded_file:
+            file_type = uploaded_file.type
+            files_ids = []
+        
+            #TODO add support in TXT
+            if file_type == "text/plain":
+                plaintext = str(uploaded_file.read(), "utf-8")
+            else:
+                with st.spinner("File is being processed..."):
+                    with pdfplumber.open(uploaded_file) as pdf:
+                        all_text = [p.extract_text() for p in pdf.pages]
+        
+                    filtered = [i.strip() for i in all_text]
+                    filtered = ['\n'.join([i.strip() for i in page.split('\n')[:-1]]).strip() for page in filtered]
+                    filtered = [re.sub(' +', ' ', i) for i in filtered]
+                    segmented_text = merge_segments(filtered, max_chars)
+                    files_paths    = write_to_library(segmented_text, uploaded_file.name)
 
-                for file_path in files_paths:
-                    try:
-                        response = files_ids.append(ai21.Library.Files.upload(file_path=file_path))
-                    except UnprocessableEntity:
-                            st.write("This file already exists, please rename the file")
+                    for file_path in files_paths:
+                        try:
+                            response = files_ids.append(ai21.Library.Files.upload(file_path=file_path))
+                        except UnprocessableEntity:
+                                st.write("This file already exists, please rename the file")
 
-                st.session_state['files_ids']     = files_ids
-                st.session_state['file_uploaded'] = True
+                    st.session_state['files_ids']     = files_ids
+                    st.session_state['file_uploaded'] = True
     else:
+        st.file_uploader("choose .pdf/.txt file ", type=["pdf", "text", "txt"], disabled = True)
         st.write("Don't forget to remove your file before uploading a new one")
+        st.write("Please remove your file before leaving ")
+        if st.button("Remove file"):
+            if 'files_ids' in st.session_state:
+                for file_id in st.session_state['files_ids']:
+                    with st.spinner("Loading..."):
+                        response = ai21.Library.Files.delete(file_id)
+
+                del st.session_state['file_uploaded']
+                del st.session_state['files_ids']
+                st.experimental_rerun()
+            else:
+                st.write("No files to remove")
+            
 
     st.markdown("**Ask a question about the uploaded document**") 
     question = st.text_input(label = "Question:", value = DOC_QA)
@@ -85,12 +100,7 @@ if __name__ == '__main__':
             
     if "answer" in st.session_state:
         st.write(st.session_state['answer'])
+        del st.session_state['answer']
 
-    st.write("Please remove your file before leaving ")
-    if st.button("Remove file"):
-        with st.spinner("Loading..."):
-            if st.session_state['files_ids'] != None:
-                for file_id in st.session_state['files_ids']:
-                    ai21.Library.Files.delete(file_id)
-                st.session_state['file_uploaded'] = False
-                st.session_state['files_ids']     = None
+   
+        
