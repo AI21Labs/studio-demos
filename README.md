@@ -12,13 +12,13 @@ This repository demonstrates the following examples of AI21 LLM use cases with S
 - Contextual Answers
 - Multiple Document Q&A
 
-[Streamlit Demo App](https://ai21-studio-app-demo-test1.streamlit.app/)
+[Streamlit Demo App](https://ai21-studio-demos.streamlit.app/)
 
 # Setup the app with your AI21 account 
 - Create `secrets.toml` in `.streamlit` folder,  and add your credentials (replace `<YOUR_API_KEY>` with your AI21 API Key):
 ```
 [api-keys]
-ai21-algo-team-prod = "<YOUR_API_KEY>"
+ai21-api-key = "<YOUR_API_KEY>"
 ```
 - Run `Welcome.py`
 
