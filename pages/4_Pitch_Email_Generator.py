@@ -87,7 +87,7 @@ def toolbar():
     with cols[2]:
         st.text(f"{st.session_state['index'] + 1}/{len(st.session_state['completions'])}")
     with cols[3]:
-        if st.button(label='>', key='next'):
+        if st.button(label='\>', key='next'):
             on_next()
 
 

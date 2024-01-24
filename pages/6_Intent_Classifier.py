@@ -2,6 +2,7 @@ import asyncio
 import math
 import streamlit as st
 from constants import DEFAULT_MODEL
+from utils.studio_style import apply_studio_style
 from utils.completion import async_complete, tokenize
 import re
 
@@ -32,6 +33,7 @@ def batch_responses(prompts, delay=0.25):
 
 
 if __name__ == "__main__":
+    apply_studio_style()
     st.title("Text Classifier")
     instruction = "Classify the following question into one of the following classes:"
     st.write(instruction)
