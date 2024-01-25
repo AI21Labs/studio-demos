@@ -96,8 +96,8 @@ st.set_page_config(
 
 if __name__ == '__main__':
     apply_studio_style()
-    st.title("Document Q&A")
-    st.markdown("**Upload a document**")
+    st.title("Multi-Document Q&A")
+    st.markdown("**Upload documents**")
     
     uploaded_files = st.file_uploader("choose .pdf/.txt file ",
                                       accept_multiple_files=True,

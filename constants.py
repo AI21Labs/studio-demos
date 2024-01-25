@@ -1,7 +1,7 @@
 import ai21
 import streamlit as st
 
-ai21.api_key = st.secrets['api-keys']['ai21-algo-team-prod']
+ai21.api_key = st.secrets['api-keys']['ai21-api-key']
 
 DEFAULT_MODEL = 'j2-ultra'
 
