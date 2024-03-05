@@ -34,7 +34,7 @@ def batch_responses(prompts, delay=0.25):
 
 if __name__ == "__main__":
     apply_studio_style()
-    st.title("Text Classifier")
+    st.title("Intent Classifier")
     instruction = "Classify the following question into one of the following classes:"
     st.write(instruction)
 
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     if st.button('Classify'):
         prompt = f"{instruction}\n{st.session_state['classes']}\n\nQuestion:\n{st.session_state['question']}\n\nClass:\n"
-        num_tokens = len(tokenize(prompt))
+        num_tokens = tokenize(prompt)
         responses = batch_responses([prompt + c for c in st.session_state['classes'].split('\n')])
         results = {}
         for i, r in enumerate(responses):

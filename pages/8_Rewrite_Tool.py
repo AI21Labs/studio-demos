@@ -1,15 +1,20 @@
 import streamlit as st
 from utils.studio_style import apply_studio_style
-from constants import ai21
+from constants import client
+from ai21.models import ParaphraseStyleType
 
 st.set_page_config(
     page_title="Rewrite Tool",
 )
 
 
-def get_suggestions(text, intent='general', span_start=0, span_end=None):
-    rewrite_resp = ai21.Paraphrase.execute(text=text, intent=intent, spanStart=span_start, spanEnd=span_end or len(text))
-    rewritten_texts = [sug['text'] for sug in rewrite_resp['suggestions']]
+def get_suggestions(text, intent=ParaphraseStyleType.GENERAL, span_start=0, span_end=None):
+    rewrite_resp = client.paraphrase.create(
+        text=text,
+        style=intent,
+        start_index=span_start,
+        end_index=span_end or len(text))
+    rewritten_texts = [sug.text for sug in rewrite_resp.suggestions]
     st.session_state["rewrite_rewritten_texts"] = rewritten_texts
 
 
@@ -30,7 +35,7 @@ def show_prev(cycle_length):
 if __name__ == '__main__':
     apply_studio_style()
 
-    st.title("The Rewrite Tool")
+    st.title("Rewrite Tool")
     st.write("Rephrase with ease! Find fresh new ways to reword your sentences with an AI writing companion that paraphrases & rewrites any text. Select rewrite suggestions that clearly convey your ideas with a range of different tones to choose from.")
     text = st.text_area(label="Write your text here to see what the rewrite tool can do:",
                         max_chars=500,
@@ -61,4 +66,3 @@ if __name__ == '__main__':
             st.markdown(f"{curr_index+1}/{len(suggestions)}")
         with col3:
             st.button("\>", on_click=show_next, args=(len(suggestions),))
-

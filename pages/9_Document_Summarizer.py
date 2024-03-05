@@ -2,21 +2,11 @@ import streamlit as st
 from ai21.errors import UnprocessableEntity
 
 from utils.studio_style import apply_studio_style
-from constants import ai21, SUMMARIZATION_URL, SUMMARIZATION_TEXT
+from constants import client, SUMMARIZATION_URL, SUMMARIZATION_TEXT
 
 st.set_page_config(
     page_title="Document Summarizer",
 )
-
-
-@st.cache_data(show_spinner=False)
-def get_summary(source, sourceType):
-    try:
-        response = ai21.Summarize.execute(source=source, sourceType=sourceType.upper())
-        st.session_state["summary"] = response['summary']
-    except UnprocessableEntity:
-        st.session_state["summary"] = None
-
 
 if __name__ == '__main__':
     apply_studio_style()
@@ -33,11 +23,10 @@ if __name__ == '__main__':
         source = st.text_input(label="Paste your URL here:",
                                value=SUMMARIZATION_URL).strip()
 
-    st.button(label="Summarize 📝️", on_click=get_summary, args=(source, sourceType))
-
-    if "summary" in st.session_state:
-        if st.session_state["summary"] is None:
-            st.write('Text is too long for the document summarizer, please try the segment summarizer instead.')
-        else:
-            st.text_area(label="Summary", height=250, value=st.session_state["summary"])
-
+    if st.button(label="Answer"):
+        with st.spinner("Loading..."):
+            try:
+                response = client.summarize.create(source=source, source_type=sourceType.upper())
+                st.text_area(label="Summary", height=250, value=response.summary)
+            except UnprocessableEntity:
+                st.write('Text is too long for the document summarizer, please try the segment summarizer instead.')
