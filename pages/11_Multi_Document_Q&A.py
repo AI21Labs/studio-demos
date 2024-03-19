@@ -30,7 +30,7 @@ def parse_file(user_file):
             all_text = str(user_file.read(), "utf-8", errors='ignore')
         else:
             with pdfplumber.open(user_file) as pdf:
-                all_text = [p.extract_text() for p in pdf.pages]
+                all_text = [p.extract_text() for p in pdf.pages][0]
 
     file_path_p = write_to_library(all_text, user_file.name)
     return file_path_p
