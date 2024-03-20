@@ -1,25 +1,16 @@
 import streamlit as st
 from constants import DEFAULT_MODEL
-from utils.completion import complete, tokenize
+from utils.completion import tokenize
 from utils.studio_style import apply_studio_style
 import re
+from constants import client
+
 
 st.set_page_config(
-    page_title="Marketing Generator",
+    page_title="Pitch Email Generator",
 )
 
 max_tokens = 2048 - 200
-
-MODEL_CONF = {
-    "maxTokens": 200,
-    "temperature": 0.8,
-    "numResults": 16
-    # "logitBias": {'<|endoftext|>': -5}
-}
-
-TOKENS_LIMITS = {
-    "pitch": (20, 150),
-}
 
 WORDS_LIMIT = {
     "pitch": (150, 200),
@@ -61,12 +52,17 @@ def generate(prompt, category, max_retries=2):
     min_length, max_length = WORDS_LIMIT[category]
     completions_filtered = []
     try_count = 0
-    MODEL_CONF['minTokens'], MODEL_CONF['maxTokens'] = TOKENS_LIMITS[category]
     while not len(completions_filtered) and try_count < max_retries:
-        res = complete(model_type=DEFAULT_MODEL, prompt=prompt, **MODEL_CONF)
-        completions_filtered = [comp['data']['text'] for comp in res['completions']
-                                if comp["finishReason"]["reason"] == "endoftext"
-                                and min_length <= len(comp['data']['text'].split()) <= max_length]
+        res = client.completion.create(
+            model=DEFAULT_MODEL,
+            prompt=prompt,
+            max_tokens=200,
+            temperature=0.8,
+            num_results=16
+        )
+        completions_filtered = [comp.data.text for comp in res.completions
+                                if comp.finish_reason.reason == "endoftext"
+                                and min_length <= len(comp.data.text.split()) <= max_length]
         try_count += 1
     st.session_state["completions"] = [anonymize(i) for i in completions_filtered]
 
@@ -113,7 +109,7 @@ if __name__ == '__main__':
 
     if st.button(label="Compose"):
         with st.spinner("Loading..."):
-            num_tokens = len(tokenize(prompt))
+            num_tokens = tokenize(prompt)
             if num_tokens > max_tokens:
                 st.write("Text is too long. Input is limited up to 2048 tokens. Try using a shorter text.")
                 if 'completions' in st.session_state:
@@ -129,7 +125,7 @@ if __name__ == '__main__':
         else:
             curr_text = st.session_state['completions'][st.session_state['index']]
             st.subheader(f'Generated Email')
-            st.text_area(label="", value=curr_text.strip(), height=400)
+            st.text_area(label=" ", value=curr_text.strip(), height=400)
             st.write(f"Number of words: {len(curr_text.split())}")
             if len(st.session_state['completions']) > 1:
                 toolbar()

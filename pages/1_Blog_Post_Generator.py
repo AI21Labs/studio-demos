@@ -4,8 +4,9 @@ import asyncio
 from constants import DEFAULT_MODEL
 from utils.studio_style import apply_studio_style
 import argparse
-from utils.completion import complete, async_complete
+from utils.completion import async_complete
 from utils.completion import paraphrase_req
+from constants import client
 
 st.set_page_config(
     page_title="Blog Post Generator",
@@ -31,6 +32,7 @@ def build_prompt(title, sections, section_heading):
     prompt = f"Write a descriptive section in a blog post according to the following details.\n\nBlog Title:\n{title}\n\nBlog Sections:\n{sections_text}\n\nCurrent Section Heading:\n{section_heading}\n\nCurrent Section Text:\n"
     return prompt
 
+
 def generate_sections_content(num_results, sections, title):
 
     loop = asyncio.new_event_loop()
@@ -50,6 +52,7 @@ def generate_sections_content(num_results, sections, title):
     loop.close()
     return results
 
+
 def build_generate_outline(title):
     return lambda: generate_outline(title)
 
@@ -60,22 +63,22 @@ def generate_outline(title):
 
     res = _generate_outline(title)
 
-    st.session_state["outline"] = res["completions"][0]["data"]["text"].strip()
+    st.session_state["outline"] = res.completions[0].data.text.strip()
 
 
 def _generate_outline(title):
     prompt = f"Write sections to a great blog post for the following title.\nBlog title: How to start a personal blog \nBlog sections:\n1. Pick a personal blog template\n2. Develop your brand\n3. Choose a hosting plan and domain name\n4. Create a content calendar \n5. Optimize your content for SEO\n6. Build an email list\n7. Get the word out\n\n##\n\nWrite sections to a great blog post for the following title.\nBlog title: A real-world example on Improving JavaScript performance\nBlog sections:\n1. Why I needed to Improve my JavaScript performance\n2. Three common ways to find performance issues in Javascript\n3. How I found the JavaScript performance issue using console.time\n4. How does lodash cloneDeep work?\n5. What is the alternative to lodash cloneDeep?\n6. Conclusion\n\n##\n\nWrite sections to a great blog post for the following title.\nBlog title: Is a Happy Life Different from a Meaningful One?\nBlog sections:\n1. Five differences between a happy life and a meaningful one\n2. What is happiness, anyway?\n3. Is the happiness without pleasure?\n4. Can you have it all?\n\n##\n\nWrite sections to a great blog post for the following title.\nBlog title: {title}\nBlog Sections:\n"
-    config = {
-        "numResults": 1,
-        "maxTokens": 296,
-        "temperature": 0.84,
-        "topKReturn": 0,
-        "topP": 1,
-        "stopSequences": ["##"]
-    }
-    res = complete(model_type=DEFAULT_MODEL,
-                   prompt=prompt,
-                   **config)
+
+    res = client.completion.create(
+        model=DEFAULT_MODEL,
+        prompt=prompt,
+        num_results=1,
+        max_tokens=296,
+        temperature=0.84,
+        top_k_return=0,
+        top_p=1,
+        stop_sequences=["##"]
+    )
     return res
 
 
@@ -116,8 +119,6 @@ def on_prev_click(section_heading, section_index, completions, arg_sorted_by_len
 
 def get_event_loop(title, sections, num_results):
     st.session_state['show_sections'] = True
-
-
 
     for s in sections:
         st.session_state['generated_sections_data'][s] = {}
@@ -199,6 +200,7 @@ def paraphrase(text, tone, times):
 
     return entire_text
 
+
 def on_paraphrase_click(s, tone, times):
 
     all_sections_data = st.session_state['generated_sections_data']
@@ -209,10 +211,9 @@ def on_paraphrase_click(s, tone, times):
     sec_text = section_completions[index]["data"]["text"]
     paraphrased_section = paraphrase(sec_text, tone, times)
 
-
-
     st.session_state['generated_sections_data'][s]["rewrites"][index] = paraphrased_section
     st.session_state['show_paraphrase'][s] = True
+
 
 def build_paraphrase(s, tone, times):
     return lambda: on_paraphrase_click(s, tone, times)
@@ -255,7 +256,7 @@ if __name__ == '__main__':
 
     sections = []
     if st.session_state['show_outline']:
-        text_area_outline = st.text_area(label="", height=250, value=st.session_state["outline"],
+        text_area_outline = st.text_area(label=" ", height=250, value=st.session_state["outline"],
                                          on_change=on_outline_change)
         sections = text_area_outline.split("\n")
         st.text("Unsatisfied with the generated outline? Click the 'Generate Outline' button again to re-generate it, or edit it inline.")
@@ -276,7 +277,7 @@ if __name__ == '__main__':
             section_completions = all_sections_data[s]["completions"]
             arg_sort = st.session_state['generated_sections_data'][s]["arg_sort"]
 
-            section_text_area_value = st.session_state['generated_sections_data'][s]["rewrites"][index] if st.session_state['show_paraphrase'][s] == True else  section_completions[
+            section_text_area_value = st.session_state['generated_sections_data'][s]["rewrites"][index] if st.session_state['show_paraphrase'][s] == True else section_completions[
                                                                                                             index]["data"]["text"]
             section_i_text = st.session_state['generated_sections_data'][s]["text_area_data"].text_area(label=s,
                                                                                                         height=300,
@@ -294,14 +295,11 @@ if __name__ == '__main__':
                 st.button("Paraphrase", on_click=build_paraphrase(s, tone="general", times=1),
                           key="paraphrase-button-" + s)
 
-
             with col3:
                 st.button("<", on_click=build_on_prev_click(s, i, section_completions, arg_sort), key="<" + s)
-
 
             with col4:
                 st.text(f"{index+1}/{num_results}")
 
             with col5:
                 st.button(">", on_click=build_on_next_click(s, i, section_completions, arg_sort), key=">" + s)
-

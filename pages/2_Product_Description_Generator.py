@@ -1,7 +1,8 @@
 import streamlit as st
 from constants import PRODUCT_DESCRIPTION_FEW_SHOT, DEFAULT_MODEL
-from utils.completion import complete
 from utils.studio_style import apply_studio_style
+from constants import client
+from ai21.models import Penalty
 
 st.set_page_config(
     page_title="Product Description Generator",
@@ -9,44 +10,42 @@ st.set_page_config(
 
 
 def query(prompt):
-    config = {
-        "numResults": 1,
-        "maxTokens": 240,
-        "temperature": 1,
-        "topKReturn": 0,
-        "topP":0.98,
-        "countPenalty": {
-            "scale": 0,
-            "applyToNumbers": False,
-            "applyToPunctuations": False,
-            "applyToStopwords": False,
-            "applyToWhitespaces": False,
-            "applyToEmojis": False
-        },
-        "frequencyPenalty": {
-            "scale": 225,
-            "applyToNumbers": False,
-            "applyToPunctuations": False,
-            "applyToStopwords": False,
-            "applyToWhitespaces": False,
-            "applyToEmojis": False
-        },
-        "presencePenalty": {
-            "scale": 1.2,
-            "applyToNumbers": False,
-            "applyToPunctuations": False,
-            "applyToStopwords": False,
-            "applyToWhitespaces": False,
-            "applyToEmojis": False
-      },
-      "stopSequences":["##"]
-    }
 
-    res = complete(model_type=DEFAULT_MODEL,
-                   prompt=prompt,
-                   **config)
+    res = client.completion.create(
+        model=DEFAULT_MODEL,
+        prompt=prompt,
+        num_results=1,
+        max_tokens=240,
+        temperature=1,
+        top_k_return=0,
+        top_p=0.98,
+        count_penalty=Penalty(
+            scale=0,
+            apply_to_emojis=False,
+            apply_to_numbers=False,
+            apply_to_stopwords=False,
+            apply_to_punctuation=False,
+            apply_to_whitespaces=False,
+        ),
+        frequency_penalty=Penalty(
+            scale=225,
+            apply_to_emojis=False,
+            apply_to_numbers=False,
+            apply_to_stopwords=False,
+            apply_to_punctuation=False,
+            apply_to_whitespaces=False,
+        ),
+        presence_penalty=Penalty(
+            scale=1.2,
+            apply_to_emojis=False,
+            apply_to_numbers=False,
+            apply_to_stopwords=False,
+            apply_to_punctuation=False,
+            apply_to_whitespaces=False,
+        )
+    )
 
-    return res["completions"][0]["data"]["text"]
+    return res.completions[0].data.text
 
 
 if __name__ == '__main__':
@@ -54,7 +53,6 @@ if __name__ == '__main__':
     apply_studio_style()
     st.title("Product Description Generator")
     st.markdown("###### Create valuable marketing copy for product pages that describes your product and its benefits within seconds! Simply choose a fashion accessory, a few key features, and let our tool work its magic.")
-
 
     product_input = st.text_input("Enter the name of your product:", value="Talking Picture Oxford Flat")
     features = st.text_area("List your product features here:", value="- Flat shoes\n- Amazing chestnut color\n- Man made materials")
@@ -72,7 +70,3 @@ if __name__ == '__main__':
         result = st.session_state["short-form-result"]["completion"]
         st.text("")
         st.text_area("Generated Product Description", result, height=200)
-
-
-
-

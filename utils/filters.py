@@ -22,8 +22,8 @@ def is_duplicate_prefix(input_text, output_text, th=0.7):
 
 def apply_filters(completion, prompt, media):
     min_length, max_length = CHAR_LIMIT[media]
-    text = completion['data']['text']
-    return completion["finishReason"]["reason"] == "endoftext" \
+    text = completion.data.text
+    return completion.finish_reason.reason == "endoftext" \
                        and min_length <= len(text) <= max_length \
                        and not is_duplicate_prefix(text, prompt) \
                        and "[" not in text and "]" not in text

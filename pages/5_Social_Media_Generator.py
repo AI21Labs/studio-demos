@@ -1,14 +1,7 @@
 from constants import *
-from utils.completion import complete
 from utils.filters import *
 from utils.studio_style import apply_studio_style
-
-MODEL_CONF = {
-    "maxTokens": 200,
-    "temperature": 0.8,
-    "numResults": 16
-    # "logitBias": {'<|endoftext|>': -5}
-}
+from constants import client
 
 
 def create_prompt(media, article):
@@ -22,8 +15,14 @@ def generate(article, media, max_retries=2, top=3):
     completions_filtered = []
     try_count = 0
     while not len(completions_filtered) and try_count < max_retries:
-        res = complete(model_type=DEFAULT_MODEL, prompt=prompt, **MODEL_CONF)
-        completions_filtered = [comp['data']['text'] for comp in res['completions']
+        res = client.completion.create(
+            model=DEFAULT_MODEL,
+            prompt=prompt,
+            max_tokens=200,
+            temperature=0.8,
+            num_results=16
+        )
+        completions_filtered = [comp.data.text for comp in res.completions
                                 if apply_filters(comp, article, media)]
         try_count += 1
     res = filter_duplicates(completions_filtered)[:top]
@@ -53,7 +52,7 @@ def toolbar():
 def extract():
     with st.spinner("Summarizing article..."):
         try:
-            st.session_state['article'] = ai21.Summarize.execute(source=st.session_state['url'], sourceType='URL')['summary']
+            st.session_state['article'] = client.summarize.create(source=st.session_state['url'], source_type='URL').summary
         except:
             st.session_state['article'] = False
 
