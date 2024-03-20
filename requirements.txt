@@ -148,7 +148,7 @@ tornado==6.3.3
     #   streamlit
 tqdm==4.66.1
     # via -r requirements.in
-typing-extensions==4.8.0
+typing-extensions==4.10.0
     # via
     #   altair
     #   streamlit
