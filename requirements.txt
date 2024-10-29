@@ -6,7 +6,7 @@
 #
 --no-binary grpcio
 
-ai21==2.1.2
+ai21==2.15.1
     # via -r requirements.in
 aiohttp==3.8.6
     # via -r requirements.in
