@@ -6,6 +6,7 @@ from utils.studio_style import apply_studio_style
 from constants import DOC_QA, client
 import os
 from datetime import date
+from ai21.models.chat import ChatMessage
 
 max_chars = 200000
 label = 'multi_doc'+str(date.today())
