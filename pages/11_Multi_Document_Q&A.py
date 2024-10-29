@@ -91,8 +91,8 @@ if __name__ == '__main__':
     if question:
         messages=[ChatMessage(content=question, role="user")]
         response = client.beta.conversational_rag.create(messages=messages, label=label)
-        if response.answer is None:
+        if response.choices[0].content is None:
             st.write("I'm sorry, I cannot answer your questions based on the documents I have access to.")
         else:
-            st.write(response.answer)
+            st.write(response.choices[0].content)
         
