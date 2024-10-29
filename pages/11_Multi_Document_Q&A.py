@@ -88,9 +88,10 @@ if __name__ == '__main__':
 
     question = st.chat_input(DOC_QA)
     if question:
-        response = client.library.answer.create(question=question, label=label)
+        messages=[ChatMessage(content=question, role="user")]
+        response = client.beta.conversational_rag.create(messages=messages, label=label)
         if response.answer is None:
-            st.write("The answer is not in the documents")
+            st.write("I'm sorry, I cannot answer your questions based on the documents I have access to.")
         else:
             st.write(response.answer)
         
